@@ -5,14 +5,14 @@
         "dev": "tsx watch server.ts"
     },
     "dependencies": {
-        "express": "^4.19.2",
+        "better-auth": "^1.7.7",
         "cors": "^2.8.5",
         "dotenv": "^17.4.2",
-        "morgan": "^1.10.0",
-        "postgres": "^3.4.7",
-        "better-auth": "^1.7.1",
+        "express": "^4.19.2",
+        "kysely": "^0.29.6",
         "kysely-postgres-js": "^3.0.0",
-        "kysely": "^0.29.5"
+        "morgan": "^1.10.0",
+        "postgres": "^3.4.7"
     },
     "devDependencies": {
         "@types/cors": "^2.8.17",
