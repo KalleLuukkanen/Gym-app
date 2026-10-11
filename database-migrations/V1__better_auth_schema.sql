@@ -27,7 +27,7 @@ CREATE TABLE "account" (
     "userId" VARCHAR(255) NOT NULL,
     "accountId" VARCHAR(255) NOT NULL,
     "providerId" VARCHAR(255) NOT NULL,
-    "issuer" TEXT NOT NULL,
+    /*"issuer" TEXT NOT NULL, */
     "accessToken" VARCHAR(255),
     "refreshToken" VARCHAR(255),
     "accessTokenExpiresAt" TIMESTAMP,
@@ -41,7 +41,7 @@ CREATE TABLE "account" (
     FOREIGN KEY ("userId") REFERENCES "app_user"("id")
 );
 
-CREATE UNIQUE INDEX "account_issuer_accountId_uidx" ON "account" ("issuer", "accountId");
+/*CREATE UNIQUE INDEX "account_issuer_accountId_uidx" ON "account" ("issuer", "accountId");*/
 
 CREATE TABLE "verification" (
     "id" VARCHAR(255) NOT NULL,
