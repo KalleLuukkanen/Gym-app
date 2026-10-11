@@ -20,3 +20,20 @@ services:
       - 8000:8000
     depends_on:
       - database
+
+  database:
+    container_name: gym-programmer_d
+    image: postgres:17.5
+    restart: unless-stopped
+    env_file:
+      - project.env
+
+  database-migrations:
+    image: flyway/flyway:11.10
+    env_file:
+      - project.env
+    depends_on:
+      - database
+    volumes:
+      - ./database-migrations:/flyway/db/migration
+    command: -connectRetries=60 -baselineOnMigrate=true migrate
