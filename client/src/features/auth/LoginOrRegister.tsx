@@ -43,9 +43,7 @@ export default function LoginOrRegister({ isLogin }: { isLogin: boolean }) {
                         setErrorMessage(c.error.message);
                     },
                     onSuccess: () => {
-                        setTimeout(() => {
-                            window.location.href = "/"
-                        }, 1000);
+                        window.location.href = "/"
                     }
                 }
             )
@@ -57,9 +55,7 @@ export default function LoginOrRegister({ isLogin }: { isLogin: boolean }) {
                         setErrorMessage(c.error.message)
                     },
                     onSuccess: () => {
-                        setTimeout(() => {
-                            window.location.href = "/"
-                        }, 1000);
+                        window.location.href = "/"
                     }
                 }
             )
