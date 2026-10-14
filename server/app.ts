@@ -3,6 +3,7 @@ import cors from "cors";
 import morgan from "morgan";
 import { toNodeHandler, fromNodeHeaders } from "better-auth/node";
 import { auth } from "./auth.js";
+import * as programController from "./controllers/programController.js";
 
 const app = express();
 app.use(cors({
@@ -33,8 +34,17 @@ app.use("/api", (req, res, next) => {
 });
 
 
-app.get("/api", (req, res) => {
-    res.send({ message: "test" });
-});
+app.get("/api/programs", programController.getAll);
+app.get("/api/programs/current", programController.getCurrent);
+app.get("/api/programs/archived", programController.getArchived);
+app.get("/api/programs/nonarchived", programController.getNonArchived);
+app.get("/api/programs/:programId", programController.getOne);
+app.post("/api/programs", programController.create);
+app.patch("/api/programs/:programId/name", programController.updateName);
+app.patch("/api/programs/:programId/active", programController.setActive);
+app.patch("/api/programs/:programId/inactive", programController.setInactive);
+app.patch("/api/programs/:programId", programController.archive);
+app.delete("/api/programs", programController.deleteAll);
+app.delete("/api/programs/:programId");
 
 export default app;
