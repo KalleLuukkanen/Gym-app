@@ -17,13 +17,6 @@ CREATE TABLE "workout" (
     archived_at TIMESTAMPTZ
 );
 
-CREATE TABLE "exercise" (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    user_id VARCHAR(255) NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
-    name TEXT NOT NULL,
-    UNIQUE (user_id, name)
-);
-
 CREATE TABLE "workout_session" (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     workout_id INTEGER NOT NULL REFERENCES workout(id) ON DELETE CASCADE,
@@ -32,10 +25,9 @@ CREATE TABLE "workout_session" (
     notes TEXT
 );
 
-CREATE TABLE "workout_exercise" (
+CREATE TABLE "exercise" (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     workout_id INTEGER NOT NULL REFERENCES workout(id) ON DELETE CASCADE,
-    exercise_id INTEGER NOT NULL REFERENCES exercise(id) ON DELETE CASCADE,
     user_id VARCHAR(255) NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
     position INTEGER NOT NULL,
     target_sets INTEGER NOT NULL,
