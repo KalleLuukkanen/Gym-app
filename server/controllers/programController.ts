@@ -126,4 +126,35 @@ const deleteAll = async (req: Request, res: Response) => {
     return res.status(200).json(deletedPrograms);
 };
 
-export { getAll, getOne, getCurrent, getArchived, getNonArchived, create, updateName, setActive, setInactive, archive, deleteOne, deleteAll };
+const getPublic = async (req: Request, res: Response) => {
+    const publicPrograms = await programRepository.getPublic();
+    return res.status(200).json(publicPrograms);
+};
+
+const makePublic = async (req: Request, res: Response) => {
+    const user_id = (req as any).userId;
+    const id = Number(req.params.programId);
+    if (!Number.isInteger(id)) {
+        return res.status(400).json({ error: "Invalid program id" });
+    }
+    const updatedProgram = await programRepository.makePublic(user_id, id);
+    if (!updatedProgram) {
+        return res.status(404).json({ error: "Program could not be made public" });
+    }
+    return res.status(200).json(updatedProgram);
+};
+
+const makePrivate = async (req: Request, res: Response) => {
+    const user_id = (req as any).userId;
+    const id = Number(req.params.programId);
+    if (!Number.isInteger(id)) {
+        return res.status(400).json({ error: "Invalid program id" });
+    }
+    const updatedProgram = await programRepository.makePrivate(user_id, id);
+    if (!updatedProgram) {
+        return res.status(404).json({ error: "Program could not be made private" });
+    }
+    return res.status(200).json(updatedProgram);
+};
+
+export { getAll, getOne, getCurrent, getArchived, getNonArchived, create, updateName, setActive, setInactive, archive, deleteOne, deleteAll, getPublic, makePrivate, makePublic };

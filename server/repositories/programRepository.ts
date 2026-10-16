@@ -12,6 +12,15 @@ const getAll = async (user_id: string) => {
     return result;
 };
 
+const getPublic = async () => {
+    const result = await sql`
+        SELECT *
+        FROM program
+        WHERE public = true;
+    `;
+    return result;
+};
+
 const getOne = async (user_id: string, id: number) => {
     const result = await sql`
         SELECT * 
@@ -86,6 +95,26 @@ const create = async (user_id: string, name: string, active = false) => {
     });
 };
 
+const makePublic = async (user_id: string, id: number) => {
+    const result = await sql`
+        UPDATE program
+        SET public = true
+        WHERE user_id = ${user_id} AND = id = ${id}
+        RETURNING *;
+    `;
+    return result[0];
+};
+
+const makePrivate = async (user_id: string, id: number) => {
+    const result = await sql`
+        UPDATE program
+        SET public = false
+        WHERE user_id = ${user_id} AND = id = ${id}
+        RETURNING *;
+    `;
+    return result[0];
+};
+
 const updateName = async (user_id: string, new_name: string, id: number) => {
     const result = await sql`
         UPDATE program
@@ -136,4 +165,4 @@ const deleteAll = async (user_id: string) => {
     return result;
 };
 
-export { getAll, getOne, getCurrent, getArchived, getNonArchived, create, updateName, setActive, setInactive, archive, deleteOne, deleteAll };
+export { getAll, getOne, getCurrent, getArchived, getNonArchived, create, updateName, setActive, setInactive, archive, deleteOne, deleteAll, getPublic, makePublic, makePrivate };

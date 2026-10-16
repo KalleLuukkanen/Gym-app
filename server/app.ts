@@ -35,6 +35,7 @@ app.use("/api", (req, res, next) => {
 
 
 app.get("/api/programs", programController.getAll);
+app.get("/api/programs/public", programController.getPublic)
 app.get("/api/programs/current", programController.getCurrent);
 app.get("/api/programs/archived", programController.getArchived);
 app.get("/api/programs/nonarchived", programController.getNonArchived);
@@ -43,7 +44,9 @@ app.post("/api/programs", programController.create);
 app.patch("/api/programs/:programId/name", programController.updateName);
 app.patch("/api/programs/:programId/active", programController.setActive);
 app.patch("/api/programs/:programId/inactive", programController.setInactive);
-app.patch("/api/programs/:programId", programController.archive);
+app.patch("/api/programs/:programId/public", programController.makePublic);
+app.patch("/api/programs/:programId/private", programController.makePrivate);
+app.patch("/api/programs/:programId/archive", programController.archive);
 app.delete("/api/programs", programController.deleteAll);
 app.delete("/api/programs/:programId");
 
