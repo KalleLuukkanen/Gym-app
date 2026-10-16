@@ -5,6 +5,7 @@ import { toNodeHandler, fromNodeHeaders } from "better-auth/node";
 import { auth } from "./auth.js";
 import * as programController from "./controllers/programController.js";
 import * as workoutController from "./controllers/workoutController.js";
+import * as exerciseController from "./controllers/exerciseController.js";
 
 const app = express();
 app.use(cors({
@@ -58,5 +59,11 @@ app.get("/api/workouts/:workoutId", workoutController.getOne);
 app.post("/api/workouts/:programId", workoutController.create);
 app.delete("/api/workouts", workoutController.deleteAll);
 app.delete("/api/workouts/:workoutId", workoutController.deleteOne);
+
+app.get("/api/exercises", exerciseController.getAll);
+app.get("/api/exercises/:exerciseId", exerciseController.getOne);
+app.post("/api/exercises", exerciseController.create);
+app.delete("/api/exercises", exerciseController.deleteAll);
+app.delete("/api/exercises/:exerciseId", exerciseController.deleteOne);
 
 export default app;
