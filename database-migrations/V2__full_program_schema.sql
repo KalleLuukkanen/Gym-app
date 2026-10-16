@@ -4,6 +4,7 @@ CREATE TABLE "program" (
     user_id VARCHAR(255) NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
     active BOOLEAN NOT NULL DEFAULT false,
     archived_at TIMESTAMPTZ,
+    public BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -12,7 +13,7 @@ CREATE TABLE "workout" (
     name TEXT NOT NULL,
     user_id VARCHAR(255) NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
     program_id INTEGER NOT NULL REFERENCES program(id) ON DELETE CASCADE,
-    position INTEGER NOT NULL,
+    day TEXT NOT NULL CHECK ( day IN ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday')),
     archived_at TIMESTAMPTZ
 );
 
