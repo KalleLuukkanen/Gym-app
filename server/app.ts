@@ -6,6 +6,7 @@ import { auth } from "./auth.js";
 import * as programController from "./controllers/programController.js";
 import * as workoutController from "./controllers/workoutController.js";
 import * as sessionController from "./controllers/sessionController.js";
+import * as exerciseController from "./controllers/exerciseController.js";
 
 const app = express();
 app.use(cors({
@@ -68,5 +69,15 @@ app.patch("/api/sessions/date", sessionController.changeDate);
 app.patch("/api/sessions/notes", sessionController.addNotes);
 app.delete("/api/sessions", sessionController.deleteAll);
 app.delete("/api/sessions/:sessionId", sessionController.deleteOne);
+
+app.get("/api/exercises", exerciseController.getAll);
+app.get("/api/exercises/workout/:workoutId", exerciseController.getByWorkout);
+app.get("/api/exercises/:exerciseId", exerciseController.getOne);
+app.post("/api/exercises/:workoutId", exerciseController.create);
+app.patch("/api/exercises/:exerciseId/modify", exerciseController.modify);
+app.patch("/api/exercises/:exerciseId/name", exerciseController.changeName);
+app.patch("/api/exercises/:exerciseId/position", exerciseController.changePosition);
+app.delete("/api/exercises", exerciseController.deleteAll);
+app.delete("/api/exercises/:exerciseId");
 
 export default app;
