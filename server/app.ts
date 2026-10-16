@@ -4,6 +4,7 @@ import morgan from "morgan";
 import { toNodeHandler, fromNodeHeaders } from "better-auth/node";
 import { auth } from "./auth.js";
 import * as programController from "./controllers/programController.js";
+import * as workoutController from "./controllers/workoutController.js";
 
 const app = express();
 app.use(cors({
@@ -49,5 +50,13 @@ app.patch("/api/programs/:programId/private", programController.makePrivate);
 app.patch("/api/programs/:programId/archive", programController.archive);
 app.delete("/api/programs", programController.deleteAll);
 app.delete("/api/programs/:programId");
+
+app.get("/api/workouts", workoutController.getAll);
+app.get("/api/workouts/program/:programId/position", workoutController.getByPosition);
+app.get("/api/workouts/program/:programId", workoutController.getByProgram);
+app.get("/api/workouts/:workoutId", workoutController.getOne);
+app.post("/api/workouts/:programId", workoutController.create);
+app.delete("/api/workouts", workoutController.deleteAll);
+app.delete("/api/workouts/:workoutId", workoutController.deleteOne);
 
 export default app;
