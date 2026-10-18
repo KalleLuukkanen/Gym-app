@@ -39,3 +39,22 @@ export type SessionInput = {
     date: string;
     notes: string | null;
 };
+
+export type Exercise = {
+    id: number;
+    name: string;
+    workout_id: number;
+    position: number;
+    target_sets: number;
+    min_reps: number;
+    max_reps: number;
+};
+
+export type ExerciseInput = {
+    name: string;
+    workout_id: number;
+    position: number;
+    target_sets: number;
+    min_reps: number;
+    max_reps: number;
+};
