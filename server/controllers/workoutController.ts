@@ -36,7 +36,7 @@ const getByDay = async (req: Request, res: Response) => {
     if (!Number.isInteger(program_id)) {
         return res.status(400).json({ error: "Invalid program id" });
     }
-    const { day } = req.body;
+    const day = req.params.day;
     if (!day) {
         return res.status(400).json({ error: "Missing required parameter" });
     }
