@@ -1,5 +1,5 @@
 import type { ExerciseInput } from "../types/types";
-const BASE_URL = `${import.meta.env.VITE_API_URL}/exercises`;
+const BASE_URL = `${import.meta.env.VITE_API_URL}/api/exercises`;
 
 const getAll = async () => {
     const response = await fetch(BASE_URL, {
