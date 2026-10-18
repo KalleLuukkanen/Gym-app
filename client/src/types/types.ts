@@ -58,3 +58,20 @@ export type ExerciseInput = {
     min_reps: number;
     max_reps: number;
 };
+
+export type Log = {
+    id: number;
+    session_id: number;
+    exercise_id: number;
+    set_number: number;
+    reps: number;
+    weight: number;
+};
+
+export type LogInput = {
+    session_id: number;
+    exercise_id: number;
+    set_number: number;
+    reps: number;
+    weight: number;
+};
