@@ -30,17 +30,17 @@ const getByProgram = async (req: Request, res: Response) => {
     return res.status(200).json(workouts);
 };
 
-const getByPosition = async (req: Request, res: Response) => {
+const getByDay = async (req: Request, res: Response) => {
     const user_id = (req as any).userId;
     const program_id = Number(req.params.programId);
     if (!Number.isInteger(program_id)) {
         return res.status(400).json({ error: "Invalid program id" });
     }
-    const { position } = req.body;
-    if (!Number.isInteger(Number(position))) {
-        return res.status(400).json({ error: "Invalid position" });
+    const { day } = req.body;
+    if (!day) {
+        return res.status(400).json({ error: "Missing required parameter" });
     }
-    const workout = await workoutRepository.getByPosition(user_id, Number(position), program_id);
+    const workout = await workoutRepository.getByDay(user_id, day, program_id);
     if (!workout) {
         return res.status(404).json({ error: "Workout not found" });
     }
@@ -53,11 +53,11 @@ const create = async (req: Request, res: Response) => {
     if (!Number.isInteger(program_id)) {
         return res.status(400).json({ error: "Invalid program id" });
     }
-    const { name, position } = req.body;
-    if (!(name || position)) {
+    const { name, day } = req.body;
+    if (!(name || day)) {
         return res.status(400).json({ error: "Missing required parameters" });
     }
-    const createdWorkout = await workoutRepository.create(user_id, name, position, program_id);
+    const createdWorkout = await workoutRepository.create(user_id, name, day, program_id);
     if (!createdWorkout) {
         return res.status(404).json({ error: "Error creating workout" });
     }
@@ -83,4 +83,4 @@ const deleteOne = async (req: Request, res: Response) => {
     return res.status(200).json(deletedWorkout);
 };
 
-export { getAll, getOne, getByProgram, getByPosition, create, deleteAll, deleteOne };
+export { getAll, getOne, getByProgram, getByDay, create, deleteAll, deleteOne };

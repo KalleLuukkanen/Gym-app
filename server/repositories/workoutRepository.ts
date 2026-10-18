@@ -24,25 +24,24 @@ const getByProgram = async (user_id: string, program_id: number) => {
     const result = await sql`
         SELECT *
         FROM workout
-        WHERE user_id = ${user_id} AND program_id = ${program_id}
-        ORDER BY position;
+        WHERE user_id = ${user_id} AND program_id = ${program_id};
     `;
     return result;
 };
 
-const getByPosition = async (user_id: string, position: number, program_id: number) => {
+const getByDay = async (user_id: string, day: string, program_id: number) => {
     const result = await sql`
         SELECT *
         FROM workout
-        WHERE user_id = ${user_id} AND program_id = ${program_id} AND position = ${position};
+        WHERE user_id = ${user_id} AND program_id = ${program_id} AND day = ${day};
     `;
     return result[0];
 };
 
-const create = async (user_id: string, name: string, position: number, program_id: number) => {
+const create = async (user_id: string, name: string, day: string, program_id: number) => {
     const result = await sql`
-        INSERT INTO workout (name, user_id, program_id, position)
-        VALUES (${name}, ${user_id}, ${program_id}, ${position})
+        INSERT INTO workout (name, user_id, program_id, day)
+        VALUES (${name}, ${user_id}, ${program_id}, ${day})
         RETURNING *;
     `;
     return result[0];
@@ -68,4 +67,4 @@ const deleteAll = async (user_id: string) => {
     return result;
 };
 
-export { getAll, getOne, getByProgram, getByPosition, create, deleteAll, deleteOne };
+export { getAll, getOne, getByProgram, getByDay, create, deleteAll, deleteOne };

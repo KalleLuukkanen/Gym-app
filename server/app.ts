@@ -55,7 +55,7 @@ app.delete("/api/programs", programController.deleteAll);
 app.delete("/api/programs/:programId");
 
 app.get("/api/workouts", workoutController.getAll);
-app.get("/api/workouts/program/:programId/position", workoutController.getByPosition);
+app.get("/api/workouts/program/:programId/day", workoutController.getByDay);
 app.get("/api/workouts/program/:programId", workoutController.getByProgram);
 app.get("/api/workouts/:workoutId", workoutController.getOne);
 app.post("/api/workouts/:programId", workoutController.create);
