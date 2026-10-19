@@ -5,6 +5,9 @@ const getAll = async () => {
     const response = await fetch(BASE_URL, {
         credentials: "include",
     });
+    if (!response.ok) {
+        throw new Error("Failed to get all your programs, please try again later");
+    }
     return await response.json();
 };
 
@@ -12,6 +15,9 @@ const getPublic = async () => {
     const response = await fetch(`${BASE_URL}/public`, {
         credentials: "include",
     });
+    if (!response.ok) {
+        throw new Error("Failed to fetch public programs, please try again later");
+    }
     return await response.json();
 };
 
@@ -19,6 +25,9 @@ const getCurrent = async () => {
     const response = await fetch(`${BASE_URL}/current`, {
         credentials: "include",
     });
+    if (!response.ok) {
+        throw new Error("Failed to get your current program, please try again later");
+    }
     return await response.json();
 };
 
@@ -26,6 +35,9 @@ const getArchived = async () => {
     const response = await fetch(`${BASE_URL}/archived`, {
         credentials: "include",
     });
+    if (!response.ok) {
+        throw new Error("Failed to fetch the archived programs, please try again later");
+    }
     return await response.json();
 };
 
@@ -33,6 +45,9 @@ const getNonArchived = async () => {
     const response = await fetch(`${BASE_URL}/nonarchived`, {
         credentials: "include",
     });
+    if (!response.ok) {
+        throw new Error("Failed to fetch the non-archived programs, please try again later");
+    }
     return await response.json();
 };
 
@@ -40,6 +55,9 @@ const getOne = async (id: number) => {
     const response = await fetch(`${BASE_URL}/${id}`, {
         credentials: "include",
     });
+    if (!response.ok) {
+        throw new Error("Failed to fetch this program, please try again later");
+    }
     return await response.json();
 };
 
@@ -50,6 +68,9 @@ const create = async (program: ProgramInput) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(program),
     });
+    if (!response.ok) {
+        throw new Error("Failed to create the program, please try again later");
+    }
     return await response.json();
 };
 
@@ -60,6 +81,9 @@ const updateName = async (id: number, name: string) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),
     });
+    if (!response.ok) {
+        throw new Error("Failed to update program's name, please try again later");
+    }
     return await response.json();
 };
 
@@ -69,6 +93,9 @@ const setActive = async (id: number) => {
         method: "PATCH",
         headers: { "Content-Type": "application/json" }
     });
+    if (!response.ok) {
+        throw new Error("Failed to set the program as active, please try again later");
+    }
     return await response.json();
 };
 
@@ -78,6 +105,9 @@ const setInActive = async (id: number) => {
         method: "PATCH",
         headers: { "Content-Type": "application/json" }
     });
+    if (!response.ok) {
+        throw new Error("Failed to set the program as inactive, please try again later");
+    }
     return await response.json();
 };
 
@@ -87,6 +117,9 @@ const setPublic = async (id: number) => {
         method: "PATCH",
         headers: { "Content-Type": "application/json" }
     });
+    if (!response.ok) {
+        throw new Error("Failed to set the program public, please try again later");
+    }
     return await response.json();
 };
 
@@ -96,6 +129,9 @@ const setPrivate = async (id: number) => {
         method: "PATCH",
         headers: { "Content-Type": "application/json" }
     });
+    if (!response.ok) {
+        throw new Error("Failed to set the program private, please try again later");
+    }
     return await response.json();
 };
 
@@ -105,6 +141,9 @@ const archive = async (id: number) => {
         method: "PATCH",
         headers: { "Content-Type": "application/json" }
     });
+    if (!response.ok) {
+        throw new Error("Failed to archive the program, please try again later");
+    }
     return await response.json();
 };
 
@@ -113,6 +152,9 @@ const deleteOne = async (id: number) => {
         credentials: "include",
         method: "DELETE",
     });
+    if (!response.ok) {
+        throw new Error("Failed to delete the program, please try again later");
+    }
     return await response.json();
 };
 
@@ -121,6 +163,9 @@ const deleteAll = async () => {
         credentials: "include",
         method: "DELETE",
     });
+    if (!response.ok) {
+        throw new Error("Failed to delete all programs, please try again later");
+    }
     return await response.json();
 };
 
@@ -131,6 +176,9 @@ const createProgram = async (program: ProgramInput, workouts: WorkoutInput[]) =>
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...program, workouts }),
     });
+    if (!response.ok) {
+        throw new Error("Failed to create program, please try again later");
+    }
     return await response.json();
 };
 

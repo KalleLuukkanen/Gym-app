@@ -5,6 +5,9 @@ const getAll = async () => {
     const response = await fetch(BASE_URL, {
         credentials: "include",
     });
+    if (!response.ok) {
+        throw new Error("Failed to get all your sessions, please try again later");
+    }
     return await response.json();
 };
 
@@ -12,6 +15,9 @@ const getOne = async (id: number) => {
     const response = await fetch(`${BASE_URL}/${id}`, {
         credentials: "include",
     });
+    if (!response.ok) {
+        throw new Error("Failed to get this session, please try again later");
+    }
     return await response.json();
 };
 
@@ -19,6 +25,9 @@ const getByWorkout = async (workout_id: number) => {
     const response = await fetch(`${BASE_URL}/workout(${workout_id}`, {
         credentials: "include",
     });
+    if (!response.ok) {
+        throw new Error("Failed to get workout's sessions, please try again later");
+    }
     return await response.json();
 };
 
@@ -29,6 +38,9 @@ const create = async (workout_id: number, session: SessionInput) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(session),
     });
+    if (!response.ok) {
+        throw new Error("Failed to create session, please try again later");
+    }
     return await response.json();
 };
 
@@ -39,6 +51,9 @@ const changeDate = async (id: number, date: string) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ date }),
     });
+    if (!response.ok) {
+        throw new Error("Failed to change date of this session, please try again later");
+    }
     return await response.json();
 };
 
@@ -49,6 +64,9 @@ const addNotes = async (id: number, notes: string) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ notes }),
     });
+    if (!response.ok) {
+        throw new Error("Failed to add notes to session, please try again later");
+    }
     return await response.json();
 };
 
@@ -57,6 +75,9 @@ const deleteOne = async (id: number) => {
         credentials: "include",
         method: "DELETE",
     });
+    if (!response.ok) {
+        throw new Error("Failed to delete this session, please try again later");
+    }
     return await response.json();
 };
 
@@ -65,6 +86,9 @@ const deleteAll = async () => {
         credentials: "include",
         method: "DELETE",
     });
+    if (!response.ok) {
+        throw new Error("Failed to delete all sessions, please try again later");
+    }
     return await response.json();
 };
 
