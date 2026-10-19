@@ -23,7 +23,6 @@ export type Workout = {
 
 export type WorkoutInput = {
     name: string;
-    program_id: number;
     day: string;
 };
 
@@ -52,7 +51,6 @@ export type Exercise = {
 
 export type ExerciseInput = {
     name: string;
-    workout_id: number;
     position: number;
     target_sets: number;
     min_reps: number;
