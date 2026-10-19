@@ -1,4 +1,4 @@
-import type { ProgramInput } from "../types/types";
+import type { ProgramInput, WorkoutInput } from "../types/types";
 const BASE_URL = `${import.meta.env.VITE_API_URL}/api/programs`;
 
 const getAll = async () => {
@@ -124,4 +124,14 @@ const deleteAll = async () => {
     return await response.json();
 };
 
-export { getAll, getOne, getArchived, getCurrent, getNonArchived, getPublic, create, updateName, setActive, setInActive, setPrivate, setPublic, archive, deleteAll, deleteOne };
+const createProgram = async (program: ProgramInput, workouts: WorkoutInput[]) => {
+    const response = await fetch(BASE_URL, {
+        credentials: "include",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...program, workouts }),
+    });
+    return await response.json();
+};
+
+export { getAll, getOne, getArchived, getCurrent, getNonArchived, getPublic, create, updateName, setActive, setInActive, setPrivate, setPublic, archive, deleteAll, deleteOne, createProgram };
