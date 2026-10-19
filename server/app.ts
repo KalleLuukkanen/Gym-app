@@ -45,6 +45,7 @@ app.get("/api/programs/archived", programController.getArchived);
 app.get("/api/programs/nonarchived", programController.getNonArchived);
 app.get("/api/programs/:programId", programController.getOne);
 app.post("/api/programs", programController.create);
+app.post("/api/programs/program", programController.createProgram);
 app.patch("/api/programs/:programId/name", programController.updateName);
 app.patch("/api/programs/:programId/active", programController.setActive);
 app.patch("/api/programs/:programId/inactive", programController.setInactive);

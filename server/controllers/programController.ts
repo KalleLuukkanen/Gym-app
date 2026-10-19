@@ -157,4 +157,17 @@ const makePrivate = async (req: Request, res: Response) => {
     return res.status(200).json(updatedProgram);
 };
 
-export { getAll, getOne, getCurrent, getArchived, getNonArchived, create, updateName, setActive, setInactive, archive, deleteOne, deleteAll, getPublic, makePrivate, makePublic };
+const createProgram = async (req: Request, res: Response) => {
+    const user_id = (req as any).userId;
+    const input = req.body;
+    if (!input.name || !input.workouts || input.workouts.length === 0) {
+        return res.status(400).json({ error: "Missing program name or workouts" });
+    }
+    const createdProgram = await programRepository.createProgram(user_id, { name: input.name, active: (input?.active ?? false), isPublic: (input?.isPublic || false), workouts: input.workouts });
+    if (!createdProgram) {
+        return res.status(404).json({ error: "There was an error creating the program" });
+    }
+    return res.status(200).json(createdProgram);
+};
+
+export { getAll, getOne, getCurrent, getArchived, getNonArchived, create, updateName, setActive, setInactive, archive, deleteOne, deleteAll, getPublic, makePrivate, makePublic, createProgram };
