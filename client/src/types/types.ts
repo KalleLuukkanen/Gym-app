@@ -10,7 +10,7 @@ export type Program = {
 export type ProgramInput = {
     name: string;
     active: boolean;
-    public: boolean;
+    isPublic: boolean;
 };
 
 export type Workout = {
@@ -52,7 +52,6 @@ export type Exercise = {
 
 export type ExerciseInput = {
     name: string;
-    position: number;
     target_sets: number;
     min_reps: number;
     max_reps: number;
