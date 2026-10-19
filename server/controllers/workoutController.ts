@@ -54,7 +54,7 @@ const create = async (req: Request, res: Response) => {
         return res.status(400).json({ error: "Invalid program id" });
     }
     const { name, day } = req.body;
-    if (!(name || day)) {
+    if (!(name && day)) {
         return res.status(400).json({ error: "Missing required parameters" });
     }
     const createdWorkout = await workoutRepository.create(user_id, name, day, program_id);

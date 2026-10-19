@@ -43,7 +43,7 @@ const getByExercise = async (req: Request, res: Response) => {
 const create = async (req: Request, res: Response) => {
     const user_id = (req as any).userId;
     const { session_id, exercise_id, set_number, reps, weight } = req.body;
-    if (!(session_id || exercise_id || set_number || reps || weight)) {
+    if (!(session_id && exercise_id && set_number && reps && weight)) {
         return res.status(400).json({ error: "Missing required parameters" });
     }
     const createdLog = await exerciseLogRepository.create(user_id, exercise_id, session_id, set_number, reps, weight);
@@ -60,7 +60,7 @@ const modify = async (req: Request, res: Response) => {
         return res.status(400).json({ error: "Invalid log id" });
     }
     const { set_number, reps, weight } = req.body;
-    if (!(set_number || reps || weight)) {
+    if (!(set_number && reps && weight)) {
         return res.status(400).json({ error: "Missing required parameters" });
     }
     const updatedLog = await exerciseLogRepository.modify(user_id, set_number, reps, weight);

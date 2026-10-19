@@ -37,7 +37,7 @@ const create = async (req: Request, res: Response) => {
         return res.status(400).json({ error: "Invalid workout id" });
     }
     const { name, position, target_sets, min_reps, max_reps } = req.body;
-    if (!(name || position || target_sets || min_reps || max_reps)) {
+    if (!(name && position && target_sets && min_reps && max_reps)) {
         return res.status(400).json("Missing required parameters");
     }
     const createdExercise = await exerciseRepository.create(user_id, name, position, target_sets, min_reps, max_reps, workout_id);
@@ -54,7 +54,7 @@ const modify = async (req: Request, res: Response) => {
         return res.status(400).json({ error: "Invalid workout exercise id" });
     }
     const { target_sets, min_reps, max_reps } = req.body;
-    if (!(target_sets || min_reps || max_reps)) {
+    if (!(target_sets && min_reps && max_reps)) {
         return res.status(400).json("Missing required parameters");
     }
     const updatedExercise = await exerciseRepository.modify(user_id, id, target_sets, min_reps, max_reps);
