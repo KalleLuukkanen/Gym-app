@@ -24,6 +24,7 @@ export type Workout = {
 export type WorkoutInput = {
     name: string;
     day: string;
+    exercises: ExerciseInput[];
 };
 
 export type Session = {
