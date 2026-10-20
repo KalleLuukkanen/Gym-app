@@ -170,7 +170,7 @@ const deleteAll = async () => {
 };
 
 const createProgram = async (program: ProgramInput, workouts: WorkoutInput[]) => {
-    const response = await fetch(BASE_URL, {
+    const response = await fetch(`${BASE_URL}/program`, {
         credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
