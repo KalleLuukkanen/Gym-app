@@ -49,9 +49,9 @@ function WorkoutForm({ position, workout, onChange, onRemove }:
                 </label>
             </div>
             <span className="border border-gray-500" />
-            <ul>
+            <ul className="flex flex-wrap gap-2">
                 {workout.exercises.map((ex, i) => (
-                    <li>
+                    <li className="border border-gray-300 rounded-lg p-2" key={i}>
                         <fieldset className="flex flex-col space-y-2">
                             <div className="flex">
                                 <legend>Exercise {i + 1}</legend>

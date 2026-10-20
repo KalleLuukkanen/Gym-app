@@ -42,7 +42,7 @@ function ProgramForm() {
     return (
         <div className="flex flex-col p-4 rounded shadow-lg space-y-4">
             <p className="text-2xl">Create a new program:</p>
-            <form className="sm:grid sm:grid-cols-[3fr_1fr] flex flex-col" onSubmit={handleForm}>
+            <form className="sm:grid sm:grid-cols-[3fr_1fr] gap-2 flex flex-col" onSubmit={handleForm}>
                 <ul className="flex flex-wrap gap-2">
                     {workouts.map((w, i) => (
                         <li key={i}>
@@ -68,6 +68,7 @@ function ProgramForm() {
                             className=" p-0.5 border border-gray-300 rounded"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            required
                         />
                     </label>
                     <fieldset className="flex flex-col space-y-1">
@@ -76,6 +77,9 @@ function ProgramForm() {
                             <label className="flex justify-center items-center space-x-1">
                                 <input
                                     type="radio"
+                                    name="active"
+                                    value="false"
+                                    required
                                     onChange={(e) => setActive(false)}
                                     checked={!active}
                                 />
@@ -84,6 +88,9 @@ function ProgramForm() {
                             <label className="flex justify-center items-center space-x-1">
                                 <input
                                     type="radio"
+                                    name="active"
+                                    value="true"
+                                    required
                                     onChange={(e) => setActive(true)}
                                     checked={active}
                                 />
@@ -97,6 +104,9 @@ function ProgramForm() {
                             <label className="flex justify-center items-center space-x-1">
                                 <input
                                     type="radio"
+                                    name="public"
+                                    value="false"
+                                    required
                                     onChange={(e) => setIsPublic(false)}
                                     checked={!isPublic}
                                 />
@@ -105,6 +115,9 @@ function ProgramForm() {
                             <label className="flex justify-center items-center space-x-1">
                                 <input
                                     type="radio"
+                                    name="public"
+                                    value="true"
+                                    required
                                     onChange={(e) => setIsPublic(true)}
                                     checked={isPublic}
                                 />
@@ -115,7 +128,7 @@ function ProgramForm() {
                     <button type="submit" className="cursor-pointer border rounded-lg text-xl mt-auto bg-gray-300">
                         Save
                     </button>
-                    {errorMessage ? <p className="text-red-500 text-xl">{errorMessage}</p> : <p className="text-xl">{successMessage}</p>}
+                    {errorMessage ? <p className="text-red-500 text-xl">{errorMessage}</p> : <p className="text-2xl">{successMessage}</p>}
                 </div >
             </form >
         </div >
