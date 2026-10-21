@@ -1,4 +1,4 @@
-export type Program = {
+export type ProgramData = {
     id: number;
     name: string;
     active: boolean;
@@ -13,7 +13,7 @@ export type ProgramInput = {
     isPublic: boolean;
 };
 
-export type Workout = {
+export type WorkoutData = {
     id: number;
     name: string;
     program_id: number;
@@ -27,7 +27,7 @@ export type WorkoutInput = {
     exercises: ExerciseInput[];
 };
 
-export type Session = {
+export type SessionData = {
     id: number;
     workout_id: number;
     date: string;
@@ -40,7 +40,7 @@ export type SessionInput = {
     notes: string | null;
 };
 
-export type Exercise = {
+export type ExerciseData = {
     id: number;
     name: string;
     workout_id: number;
@@ -57,7 +57,7 @@ export type ExerciseInput = {
     max_reps: number;
 };
 
-export type Log = {
+export type LogData = {
     id: number;
     session_id: number;
     exercise_id: number;
