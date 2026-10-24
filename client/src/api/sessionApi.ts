@@ -92,4 +92,30 @@ const deleteAll = async () => {
     return await response.json();
 };
 
-export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne };
+const startSession = async (workout_id: number, date: string) => {
+    const response = await fetch(`${BASE_URL}/workout(${workout_id}/start`, {
+        credentials: "include",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date }),
+    });
+    if (!response.ok) {
+        throw new Error("Failed to start session, please try again later");
+    }
+    return await response.json();
+};
+
+const endSession = async (workout_id: number, notes: string | null) => {
+    const response = await fetch(`${BASE_URL}/workout(${workout_id}/finish`, {
+        credentials: "include",
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notes }),
+    });
+    if (!response.ok) {
+        throw new Error("Failed to end session, please try again later");
+    }
+    return await response.json();
+};
+
+export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession };

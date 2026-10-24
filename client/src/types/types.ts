@@ -32,6 +32,8 @@ export type SessionData = {
     workout_id: number;
     date: string;
     notes: string | null;
+    started_at: string;
+    finished_at: string | null;
 };
 
 export type SessionInput = {

@@ -31,6 +31,11 @@ function Workout({ workout }: { workout: WorkoutData }) {
         return () => { cancelled = true };
     }, [workout.id]);
 
+    const [exerciseReps, setExerciseReps] = useState(new Map<number, number[]>());
+    const updateReps = (exercise_id: number, reps: number, set: number) => {
+
+    };
+
     const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
     };
@@ -60,7 +65,15 @@ function Workout({ workout }: { workout: WorkoutData }) {
                     </ul>
                 </div>
             ))}
-            <button type="submit" className="ml-auto rounded cursor-pointer bg-gray-300 p-2">Save workout</button>
+            <div className="flex">
+                <label className="flex flex-col space-y-2">
+                    <span className="text-lg">Notes:</span>
+                    <textarea
+                        className="border border-gray-500 rounded p-0.5 w-64"
+                    />
+                </label>
+                <button type="submit" className="ml-auto rounded cursor-pointer bg-gray-300 p-2">Save workout</button>
+            </div>
         </form>
     )
 }

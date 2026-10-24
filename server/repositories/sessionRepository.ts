@@ -78,4 +78,23 @@ const deleteOne = async (user_id: string, id: number) => {
     return result[0];
 };
 
-export { getAll, getOne, getByWorkout, create, changeDate, addNotes, deleteAll, deleteOne };
+const startSession = async (user_id: string, workout_id: number, date: string) => {
+    const result = await sql`
+        INSERT INTO workout_session (user_id, workout_id, date, started_at)
+        VALUES (${user_id}, ${workout_id}, ${date}, NOW())
+        RETURNING *;
+    `;
+    return result[0];
+};
+
+const endSession = async (user_id: string, id: number, notes: string | null) => {
+    const result = await sql`
+        UPDATE workout_session
+        SET finished_at = NOW(), notes = ${notes}
+        WHERE user_id = ${user_id} AND id = ${id}
+        RETURNING *;
+    `;
+    return result[0];
+};
+
+export { getAll, getOne, getByWorkout, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession };

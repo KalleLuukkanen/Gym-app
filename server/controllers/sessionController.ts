@@ -100,4 +100,35 @@ const deleteAll = async (req: Request, res: Response) => {
     return res.status(200).json(deletedSessions);
 };
 
-export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne };
+const startSession = async (req: Request, res: Response) => {
+    const user_id = (req as any).userId;
+    const workout_id = Number(req.params.workoutId);
+    if (!Number.isInteger(workout_id)) {
+        return res.status(400).json({ error: "Invalid workout id" });
+    }
+    const { date } = req.body;
+    if (!date) {
+        return res.status(400).json({ error: "Missing session date" });
+    }
+    const startedSession = await sessionRepository.startSession(user_id, workout_id, date);
+    if (!startedSession) {
+        return res.status(404).json({ error: "Session couldn't be started" });
+    }
+    return res.status(200).json(startedSession);
+};
+
+const endSession = async (req: Request, res: Response) => {
+    const user_id = (req as any).userId;
+    const workout_id = Number(req.params.workoutId);
+    if (!Number.isInteger(workout_id)) {
+        return res.status(400).json({ error: "Invalid workout id" });
+    }
+    const { notes } = req.body;
+    const finishedSession = await sessionRepository.endSession(user_id, workout_id, notes ?? null);
+    if (!finishedSession) {
+        return res.status(404).json({ error: "Session couldn't be created" });
+    }
+    return res.status(200).json(finishedSession);
+};
+
+export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession };
