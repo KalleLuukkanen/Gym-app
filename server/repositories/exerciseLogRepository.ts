@@ -47,10 +47,11 @@ const create = async (user_id: string, exercise_id: number, session_id: number, 
     return result[0];
 };
 
-const modify = async (user_id: string, set_number: number, reps: number, weight: number) => {
+const modify = async (user_id: string, set_number: number, reps: number, weight: number, id: number) => {
     const result = await sql`
         UPDATE exercise_log
         SET set_number = ${set_number}, reps = ${reps}, weight = ${weight}
+        WHERE user_id = ${user_id} AND id = ${id}
         RETURNING *
     `;
     return result[0];

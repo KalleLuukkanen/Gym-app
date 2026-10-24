@@ -63,7 +63,7 @@ const modify = async (req: Request, res: Response) => {
     if (!(set_number && reps && weight)) {
         return res.status(400).json({ error: "Missing required parameters" });
     }
-    const updatedLog = await exerciseLogRepository.modify(user_id, set_number, reps, weight);
+    const updatedLog = await exerciseLogRepository.modify(user_id, set_number, reps, weight, id);
     if (!updatedLog) {
         return res.status(404).json({ error: "The log couldn't be modified" });
     }
