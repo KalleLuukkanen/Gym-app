@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { getByDay } from "../api/workoutApi";
+import { getByDay, getOne } from "../api/workoutApi";
 import { getCurrent } from "../api/programApi";
 import type { ProgramData, WorkoutData } from "../types/types";
 import Loading from "../components/Loading";
 import Workout from "../features/workouts/Workout";
 import Program from "../features/programs/Program";
+import WorkoutOption from "../features/workouts/WorkoutOption";
+import CustomWorkout from "../features/workouts/CustomWorkout";
 
 export default function Home() {
     const today = new Date();
@@ -15,6 +17,8 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
 
     const [errorMessage, setErrorMessage] = useState("");
+
+    const [custom, setCustom] = useState(false);
 
     useEffect(() => {
         let cancelled = false;
@@ -46,6 +50,23 @@ export default function Home() {
         return () => { cancelled = true };
     }, [weekday]);
 
+    const changeWorkout = async (id: number | null) => {
+        if (id) {
+            try {
+                const w = await getOne(id);
+                setWorkout(w);
+            } catch (error) {
+                if (error instanceof Error) {
+                    setErrorMessage(error.message);
+                } else {
+                    setErrorMessage("Unknown error in the system, please try again later")
+                }
+            }
+        } else {
+            setCustom(true);
+        }
+    };
+
     if (loading) {
         <Loading />
     }
@@ -72,13 +93,24 @@ export default function Home() {
     return (
         <div className="sm:grid sm:grid-cols-2 gap-2 flex flex-col">
             <div className="flex flex-col rounded shadow p-4 space-y-6">
-                {!workout ? <p className="text-2xl my-6">No workout today!</p> :
-                    <div className="flex flex-col space-y-6">
-                        <p className="text-2xl">Todays workout:</p>
-                        <div>
-                            <Workout workout={workout} />
-                        </div>
-                    </div>
+                {custom ? <CustomWorkout /> :
+                    <>
+                        {!workout ? <WorkoutOption program_id={program.id} onChange={changeWorkout} /> :
+                            <div className="flex flex-col space-y-6">
+                                <div className="flex">
+                                    <p className="text-2xl">Todays workout:</p>
+                                    <button
+                                        className="ml-auto text-lg cursor-pointer"
+                                        type="button"
+                                        onClick={() => setCustom(true)}
+                                    >
+                                        Custom
+                                    </button>
+                                </div>
+                                <Workout workout={workout} />
+                            </div>
+                        }
+                    </>
                 }
             </div>
             <div className="flex flex-col rounded shadow p-4 space-y-6">
