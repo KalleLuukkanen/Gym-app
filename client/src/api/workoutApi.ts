@@ -35,6 +35,9 @@ const getByDay = async (program_id: number, day: string) => {
     const response = await fetch(`${BASE_URL}/program/${program_id}/${day}`, {
         credentials: "include",
     });
+    if (response.status === 404) {
+        return null;
+    }
     if (!response.ok) {
         throw new Error("Failed to get this day's workout, please try again later");
     }
