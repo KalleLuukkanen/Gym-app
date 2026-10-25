@@ -105,8 +105,8 @@ const startSession = async (workout_id: number, date: string) => {
     return await response.json();
 };
 
-const endSession = async (workout_id: number, notes: string | null) => {
-    const response = await fetch(`${BASE_URL}/workout/${workout_id}/finish`, {
+const endSession = async (session_id: number, notes: string | null) => {
+    const response = await fetch(`${BASE_URL}/${session_id}/finish`, {
         credentials: "include",
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

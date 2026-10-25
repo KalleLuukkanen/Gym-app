@@ -68,7 +68,7 @@ app.get("/api/sessions/workout/:workoutId", sessionController.getByWorkout);
 app.get("/api/sessions/:workoutId/started", sessionController.getStarted);
 app.get("/api/sessions/:sessionId", sessionController.getOne);
 app.post("/api/sessions/:workoutId/start", sessionController.startSession);
-app.patch("/api/sessions/:workoutId/finish", sessionController.endSession);
+app.patch("/api/sessions/:sessionId/finish", sessionController.endSession);
 app.patch("/api/sessions/:workoutId/finish/all", sessionController.finishAll);
 app.post("/api/sessions/:workoutId", sessionController.create);
 app.patch("/api/sessions/:sessionId/date", sessionController.changeDate);

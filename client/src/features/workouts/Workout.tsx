@@ -1,7 +1,7 @@
 import type { WorkoutData, ExerciseData, SessionData } from "../../types/types";
 import { getByWorkout } from "../../api/exerciseApi";
 import React, { useState, useEffect } from "react";
-import { startSession } from "../../api/sessionApi";
+import { endSession, startSession } from "../../api/sessionApi";
 
 function Workout({ workout }: { workout: WorkoutData }) {
 
@@ -35,6 +35,8 @@ function Workout({ workout }: { workout: WorkoutData }) {
 
     const [sessionStarted, setSessionStarted] = useState(false);
 
+    const [notes, setNotes] = useState("");
+
     const start = async () => {
         try {
             const session_tmp = await startSession(workout.id, new Date().toDateString());
@@ -49,9 +51,22 @@ function Workout({ workout }: { workout: WorkoutData }) {
         }
     };
 
-    const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-    };
+    const finish = async () => {
+        if (session) {
+            try {
+                await endSession((session as SessionData).id, notes);
+                setSession(null);
+                setSessionStarted(false);
+
+            } catch (error) {
+                if (error instanceof Error) {
+                    setErrorMessage(error.message);
+                } else {
+                    setErrorMessage("Unknown error in the system, please try again later")
+                }
+            }
+        }
+    }
 
 
     if (loading) return <p>Loading exercises...</p>
@@ -68,7 +83,7 @@ function Workout({ workout }: { workout: WorkoutData }) {
     }
 
     return (
-        <form className="flex flex-col space-y-4" onSubmit={handleForm}>
+        <div className="flex flex-col space-y-4">
             <span className="text-xl">{workout.name}</span>
             {exercises?.map((e) => (
                 <div className="flex flex-col space-y-2">
@@ -92,11 +107,13 @@ function Workout({ workout }: { workout: WorkoutData }) {
                     <span className="text-lg">Notes:</span>
                     <textarea
                         className="border border-gray-500 rounded p-0.5 w-64"
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
                     />
                 </label>
-                <button type="submit" className="ml-auto rounded cursor-pointer bg-gray-300 p-2">Finish workout</button>
+                <button type="button" className="ml-auto rounded cursor-pointer bg-gray-300 p-2" onClick={finish}>Finish workout</button>
             </div>
-        </form>
+        </div>
     )
 }
 
