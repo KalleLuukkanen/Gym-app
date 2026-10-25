@@ -22,7 +22,7 @@ const getOne = async (id: number) => {
 };
 
 const getByWorkout = async (workout_id: number) => {
-    const response = await fetch(`${BASE_URL}/workout(${workout_id}`, {
+    const response = await fetch(`${BASE_URL}/workout/${workout_id}`, {
         credentials: "include",
     });
     if (!response.ok) {
@@ -32,7 +32,7 @@ const getByWorkout = async (workout_id: number) => {
 };
 
 const create = async (workout_id: number, session: SessionInput) => {
-    const response = await fetch(`${BASE_URL}/workout(${workout_id}`, {
+    const response = await fetch(`${BASE_URL}/workout/${workout_id}`, {
         credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -93,7 +93,7 @@ const deleteAll = async () => {
 };
 
 const startSession = async (workout_id: number, date: string) => {
-    const response = await fetch(`${BASE_URL}/workout(${workout_id}/start`, {
+    const response = await fetch(`${BASE_URL}/workout/${workout_id}/start`, {
         credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -106,7 +106,7 @@ const startSession = async (workout_id: number, date: string) => {
 };
 
 const endSession = async (workout_id: number, notes: string | null) => {
-    const response = await fetch(`${BASE_URL}/workout(${workout_id}/finish`, {
+    const response = await fetch(`${BASE_URL}/workout/${workout_id}/finish`, {
         credentials: "include",
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -118,4 +118,26 @@ const endSession = async (workout_id: number, notes: string | null) => {
     return await response.json();
 };
 
-export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession };
+const getStarted = async (workout_id: number) => {
+    const response = await fetch(`${BASE_URL}/${workout_id}/started`, {
+        credentials: "include",
+    });
+    if (!response.ok) {
+        throw new Error("Failed to get workout's started sessions, please try again later");
+    }
+    return await response.json();
+};
+
+const finishAll = async (workout_id: number) => {
+    const response = await fetch(`${BASE_URL}/workout/${workout_id}/finish/all`, {
+        credentials: "include",
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) {
+        throw new Error("Failed to end sessions, please try again later");
+    }
+    return await response.json();
+};
+
+export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll };

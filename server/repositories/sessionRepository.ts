@@ -97,4 +97,25 @@ const endSession = async (user_id: string, id: number, notes: string | null) => 
     return result[0];
 };
 
-export { getAll, getOne, getByWorkout, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession };
+// get started but unfinished sessions of workout
+const getStarted = async (user_id: string, workout_id: number) => {
+    const result = await sql`
+        SELECT *
+        FROM workout_session
+        WHERE user_id = ${user_id} AND workout_id = ${workout_id} AND started_at IS NOT NULL AND finished_at IS NULL
+        ORDER BY started_at DESC;
+    `;
+    return result;
+};
+
+const finishAll = async (user_id: string, workout_id: number) => {
+    const result = await sql`
+        UPDATE workout_session
+        SET finished_at = NOW()
+        WHERE user_id = ${user_id} AND workout_id = ${workout_id} AND finished_at IS NULL
+        RETURNING *;
+    `;
+    return result;
+};
+
+export { getAll, getOne, getByWorkout, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll };

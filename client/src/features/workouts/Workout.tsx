@@ -1,11 +1,14 @@
-import type { WorkoutData, ExerciseData } from "../../types/types";
+import type { WorkoutData, ExerciseData, SessionData } from "../../types/types";
 import { getByWorkout } from "../../api/exerciseApi";
 import React, { useState, useEffect } from "react";
+import { startSession } from "../../api/sessionApi";
+import WorkoutOption from "./WorkoutOption";
 
 function Workout({ workout }: { workout: WorkoutData }) {
 
     const [exercises, setExercises] = useState<ExerciseData[] | null>(null);
     const [loading, setLoading] = useState(true);
+    const [session, setSession] = useState<SessionData | null>(null);
 
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -31,9 +34,20 @@ function Workout({ workout }: { workout: WorkoutData }) {
         return () => { cancelled = true };
     }, [workout.id]);
 
-    const [exerciseReps, setExerciseReps] = useState(new Map<number, number[]>());
-    const updateReps = (exercise_id: number, reps: number, set: number) => {
+    const [sessionStarted, setSessionStarted] = useState(false);
 
+    const start = async () => {
+        try {
+            const session_tmp = await startSession(workout.id, new Date().toDateString());
+            setSession(session_tmp);
+            setSessionStarted(true);
+        } catch (error) {
+            if (error instanceof Error) {
+                setErrorMessage(error.message);
+            } else {
+                setErrorMessage("Unknown error in the system, please try again later")
+            }
+        }
     };
 
     const handleForm = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -44,6 +58,15 @@ function Workout({ workout }: { workout: WorkoutData }) {
     if (loading) return <p>Loading exercises...</p>
     if (errorMessage) return <p>{errorMessage}</p>
     if (exercises?.length === 0) return <p>This workout doesn't seem to contain any exercises...</p>
+
+    if (!sessionStarted) {
+        return (
+            <>
+                <p className="text-lg">Click to start your {workout.name} workout:</p>
+                <button className="w-fit text-lg cursor-pointer p-1 border border-gray-500 p-1 rounded" onClick={start}>Start workout</button>
+            </>
+        )
+    }
 
     return (
         <form className="flex flex-col space-y-4" onSubmit={handleForm}>
@@ -72,7 +95,7 @@ function Workout({ workout }: { workout: WorkoutData }) {
                         className="border border-gray-500 rounded p-0.5 w-64"
                     />
                 </label>
-                <button type="submit" className="ml-auto rounded cursor-pointer bg-gray-300 p-2">Save workout</button>
+                <button type="submit" className="ml-auto rounded cursor-pointer bg-gray-300 p-2">Finish workout</button>
             </div>
         </form>
     )
