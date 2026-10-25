@@ -1,5 +1,5 @@
 import type { SessionInput } from "../types/types";
-const BASE_URL = `${import.meta.env.VITE_API_URL}/api/sessions/`;
+const BASE_URL = `${import.meta.env.VITE_API_URL}/api/sessions`;
 
 const getAll = async () => {
     const response = await fetch(BASE_URL, {
@@ -93,7 +93,7 @@ const deleteAll = async () => {
 };
 
 const startSession = async (workout_id: number, date: string) => {
-    const response = await fetch(`${BASE_URL}/workout/${workout_id}/start`, {
+    const response = await fetch(`${BASE_URL}/${workout_id}/start`, {
         credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },

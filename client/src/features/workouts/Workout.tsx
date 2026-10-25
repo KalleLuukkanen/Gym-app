@@ -2,7 +2,6 @@ import type { WorkoutData, ExerciseData, SessionData } from "../../types/types";
 import { getByWorkout } from "../../api/exerciseApi";
 import React, { useState, useEffect } from "react";
 import { startSession } from "../../api/sessionApi";
-import WorkoutOption from "./WorkoutOption";
 
 function Workout({ workout }: { workout: WorkoutData }) {
 
