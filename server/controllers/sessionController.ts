@@ -141,6 +141,12 @@ const getStarted = async (req: Request, res: Response) => {
     return res.status(200).json(sessions);
 };
 
+const getStartedAll = async (req: Request, res: Response) => {
+    const user_id = (req as any).userId;
+    const sessions = await sessionRepository.getStartedAll(user_id);
+    return res.status(200).json(sessions);
+};
+
 const finishAll = async (req: Request, res: Response) => {
     const user_id = (req as any).userId;
     const workout_id = Number(req.params.workoutId);
@@ -151,4 +157,4 @@ const finishAll = async (req: Request, res: Response) => {
     return res.status(200).json(finishedSessions);
 };
 
-export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll };
+export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll, getStartedAll };

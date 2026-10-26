@@ -128,6 +128,16 @@ const getStarted = async (workout_id: number) => {
     return await response.json();
 };
 
+const getStartedAll = async () => {
+    const response = await fetch(`${BASE_URL}/started/all`, {
+        credentials: "include",
+    });
+    if (!response.ok) {
+        throw new Error("Failed to get started sessions, please try again later");
+    }
+    return await response.json();
+};
+
 const finishAll = async (workout_id: number) => {
     const response = await fetch(`${BASE_URL}/workout/${workout_id}/finish/all`, {
         credentials: "include",
@@ -140,4 +150,4 @@ const finishAll = async (workout_id: number) => {
     return await response.json();
 };
 
-export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll };
+export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll, getStartedAll };

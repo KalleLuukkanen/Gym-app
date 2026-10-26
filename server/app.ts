@@ -65,6 +65,7 @@ app.delete("/api/workouts/:workoutId", workoutController.deleteOne);
 
 app.get("/api/sessions", sessionController.getAll);
 app.get("/api/sessions/workout/:workoutId", sessionController.getByWorkout);
+app.get("/api/sessions/started/all", sessionController.getStartedAll);
 app.get("/api/sessions/:workoutId/started", sessionController.getStarted);
 app.get("/api/sessions/:sessionId", sessionController.getOne);
 app.post("/api/sessions/:workoutId/start", sessionController.startSession);
