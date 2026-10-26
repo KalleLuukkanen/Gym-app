@@ -1,9 +1,10 @@
-import type { WorkoutData, ExerciseData, SessionData } from "../../types/types";
+import type { WorkoutData, ExerciseData, SessionData, LogInput } from "../../types/types";
 import { getByWorkout } from "../../api/exerciseApi";
-import React, { useState, useEffect } from "react";
-import { endSession, startSession } from "../../api/sessionApi";
+import { useState, useEffect } from "react";
+import { endSession, startSession, getOne } from "../../api/sessionApi";
+import { create } from "../../api/logApi";
 
-function Workout({ workout }: { workout: WorkoutData }) {
+function Workout({ workout, session_id }: { workout: WorkoutData, session_id: number | null }) {
 
     const [exercises, setExercises] = useState<ExerciseData[] | null>(null);
     const [loading, setLoading] = useState(true);
@@ -34,7 +35,7 @@ function Workout({ workout }: { workout: WorkoutData }) {
     }, [workout.id]);
 
     const [sessionStarted, setSessionStarted] = useState(false);
-
+    const [exerciseDetails, setExerciseDetails] = useState(new Map<number, number[]>());
     const [notes, setNotes] = useState("");
 
     const start = async () => {
@@ -66,7 +67,18 @@ function Workout({ workout }: { workout: WorkoutData }) {
                 }
             }
         }
-    }
+    };
+
+    const updateWeight = async (set: number, exercise_id: number, weight: number) => {
+        setExerciseDetails((prev) => {
+            const next = new Map(prev);
+
+
+
+
+            return next;
+        });
+    };
 
 
     if (loading) return <p>Loading exercises...</p>
@@ -86,18 +98,30 @@ function Workout({ workout }: { workout: WorkoutData }) {
         <div className="flex flex-col space-y-4">
             <span className="text-xl">{workout.name}</span>
             {exercises?.map((e) => (
-                <div className="flex flex-col space-y-2">
+                <div className="flex flex-col space-y-2 border rounded p-4" key={e.id}>
                     <span className="text-lg">{e.position}. {e.name}</span>
-                    <ul className="flex space-x-2">
+                    <ul className="flex flex-wrap gap-6">
                         {Array.from({ length: e.target_sets }, (_, i) => (
-                            <label key={i} className="flex space-x-1 items-center justify-center">
-                                <span>Set {i + 1}:</span>
-                                <input
-                                    type="number"
-                                    className="w-16 border border-gray-300 rounded p-1"
-                                    placeholder={`${e.min_reps}-${e.max_reps}`}
-                                />
-                            </label>
+                            <fieldset key={i} className="flex space-x-1 items-center justify-center">
+                                <legend>Set {i + 1}:</legend>
+                                <label className="flex flex-col space-y-1">
+                                    <span>Reps:</span>
+                                    <input
+                                        type="number"
+                                        className="w-16 border border-gray-300 rounded p-1"
+                                        placeholder={`${e.min_reps}-${e.max_reps}`}
+                                        onChange={(e) => {
+                                        }}
+                                    />
+                                </label>
+                                <label className="flex flex-col space-y-1">
+                                    <span>Weight:</span>
+                                    <input
+                                        type="number"
+                                        className="w-16 border border-gray-300 rounded p-1"
+                                    />
+                                </label>
+                            </fieldset>
                         ))}
                     </ul>
                 </div>

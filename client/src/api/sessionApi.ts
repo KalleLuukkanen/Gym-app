@@ -1,4 +1,4 @@
-import type { SessionInput } from "../types/types";
+import type { SessionData, SessionInput } from "../types/types";
 const BASE_URL = `${import.meta.env.VITE_API_URL}/api/sessions`;
 
 const getAll = async () => {
@@ -128,14 +128,14 @@ const getStarted = async (workout_id: number) => {
     return await response.json();
 };
 
-const getStartedAll = async () => {
+const getStartedAll = async (): Promise<SessionData[]> => {
     const response = await fetch(`${BASE_URL}/started/all`, {
         credentials: "include",
     });
     if (!response.ok) {
         throw new Error("Failed to get started sessions, please try again later");
     }
-    return await response.json();
+    return (await response.json()) as SessionData[];
 };
 
 const finishAll = async (workout_id: number) => {

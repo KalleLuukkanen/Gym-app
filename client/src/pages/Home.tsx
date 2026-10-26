@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { getByDay, getOne } from "../api/workoutApi";
 import { getCurrent } from "../api/programApi";
-import type { ProgramData, WorkoutData } from "../types/types";
+import { getStartedAll, finishAll, endSession } from "../api/sessionApi";
+import type { ProgramData, WorkoutData, SessionData } from "../types/types";
 import Loading from "../components/Loading";
 import Workout from "../features/workouts/Workout";
 import Program from "../features/programs/Program";
@@ -16,14 +17,26 @@ export default function Home() {
     const [workout, setWorkout] = useState<WorkoutData | null>(null);
     const [loading, setLoading] = useState(true);
 
+
     const [errorMessage, setErrorMessage] = useState("");
 
     const [custom, setCustom] = useState(false);
+
+    const [startedSessions, setStartedSessions] = useState<SessionData[]>([]);
+    const [unfinishedWorkout, setUnfinishedWorkout] = useState<WorkoutData | null>(null);
+    const [continueWorkout, setContinueWorkout] = useState(false);
 
     useEffect(() => {
         let cancelled = false;
         const load = async () => {
             try {
+                const startedSessions_tmp = await getStartedAll();
+                if (startedSessions_tmp.length > 0) {
+                    setStartedSessions(startedSessions_tmp);
+                    const startedWorkout = await getOne(startedSessions_tmp[0].workout_id);
+                    setUnfinishedWorkout(startedWorkout);
+                }
+
                 const p = await getCurrent();
                 if (cancelled) return;
                 setProgram(p);
@@ -68,7 +81,7 @@ export default function Home() {
     };
 
     if (loading) {
-        <Loading />
+        return <Loading />
     }
 
     if (errorMessage) {
@@ -77,6 +90,46 @@ export default function Home() {
                 <p className="text-2xl">{errorMessage}</p>
             </div>
         )
+    }
+
+    if (startedSessions.length > 0 && !continueWorkout) {
+        if (startedSessions.length === 1) {
+            return (
+                <div className="flex flex-col rounded shadow p-4 w-fit space-y-2">
+                    <p className="text-2xl">Looks like you have an unfinished workout, a {unfinishedWorkout?.name} workout started {new Date(startedSessions[0].started_at).toLocaleDateString("fi-FI")}.</p>
+                    <p className="text-2xl">Do you wish to continue it?</p>
+                    <div className="flex space-x-10 ml-2">
+                        <button
+                            className="w-fit text-xl cursor-pointer"
+                        >
+                            No
+                        </button>
+                        <button
+                            className="w-fit text-xl cursor-pointer"
+                        >
+                            No, and you can mark it as finished
+                        </button>
+                        <button
+                            className="w-fit text-xl cursor-pointer"
+                            onClick={() => {
+                                setWorkout(unfinishedWorkout);
+                                setContinueWorkout(true);
+                            }}
+                        >
+                            Yes
+                        </button>
+                    </div>
+                </div>
+            )
+        } else {
+            return (
+                <div className="flex flex-col rounded shadow p-4 w-fit space-y-2">
+                    <p className="text-2xl">Looks like you have {startedSessions.length} unfinished workout(s).</p>
+                    <p>The latest </p>
+                </div>
+            )
+        }
+
     }
 
     if (!program) {
@@ -107,7 +160,7 @@ export default function Home() {
                                         Custom
                                     </button>
                                 </div>
-                                <Workout workout={workout} />
+                                <Workout workout={workout} session_id={startedSessions[0]?.id ?? null} />
                             </div>
                         }
                     </>
