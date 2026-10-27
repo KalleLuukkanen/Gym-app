@@ -153,16 +153,6 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
                             <fieldset key={i} className="flex space-x-1 items-center justify-center">
                                 <legend>Set {i + 1}:</legend>
                                 <label className="flex flex-col space-y-1">
-                                    <span>Reps:</span>
-                                    <input
-                                        type="number"
-                                        value={exerciseDetails?.get(ex.id)?.get(i + 1)?.[1] ?? ""}
-                                        className="w-16 border border-gray-300 rounded p-1"
-                                        placeholder={`${ex.min_reps}-${ex.max_reps}`}
-                                        onChange={(e) => updateReps(i + 1, ex.id, Number(e.target.value))}
-                                    />
-                                </label>
-                                <label className="flex flex-col space-y-1">
                                     <span>Weight:</span>
                                     <input
                                         type="number"
@@ -170,6 +160,16 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
                                         className="w-16 border border-gray-300 rounded p-1"
                                         onChange={(e) => updateWeight(i + 1, ex.id, Number(e.target.value))}
                                         min="1"
+                                    />
+                                </label>
+                                <label className="flex flex-col space-y-1">
+                                    <span>Reps:</span>
+                                    <input
+                                        type="number"
+                                        value={exerciseDetails?.get(ex.id)?.get(i + 1)?.[1] ?? ""}
+                                        className="w-16 border border-gray-300 rounded p-1"
+                                        placeholder={`${ex.min_reps}-${ex.max_reps}`}
+                                        onChange={(e) => updateReps(i + 1, ex.id, Number(e.target.value))}
                                     />
                                 </label>
                             </fieldset>
