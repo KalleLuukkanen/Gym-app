@@ -138,7 +138,7 @@ const getStartedAll = async (): Promise<SessionData[]> => {
     return (await response.json()) as SessionData[];
 };
 
-const finishAll = async (workout_id: number) => {
+const finishAllOfWorkout = async (workout_id: number) => {
     const response = await fetch(`${BASE_URL}/workout/${workout_id}/finish/all`, {
         credentials: "include",
         method: "PATCH",
@@ -150,4 +150,16 @@ const finishAll = async (workout_id: number) => {
     return await response.json();
 };
 
-export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll, getStartedAll };
+const finishAll = async () => {
+    const response = await fetch(`${BASE_URL}/finish/all`, {
+        credentials: "include",
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) {
+        throw new Error("Failed to end sessions, please try again later");
+    }
+    return await response.json();
+};
+
+export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll, getStartedAll, finishAllOfWorkout };

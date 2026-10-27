@@ -149,12 +149,18 @@ const getStartedAll = async (req: Request, res: Response) => {
 
 const finishAll = async (req: Request, res: Response) => {
     const user_id = (req as any).userId;
+    const finishedSessions = await sessionRepository.finishAll(user_id);
+    return res.status(200).json(finishedSessions);
+};
+
+const finishAllOfWorkout = async (req: Request, res: Response) => {
+    const user_id = (req as any).userId;
     const workout_id = Number(req.params.workoutId);
     if (!Number.isInteger(workout_id)) {
         return res.status(400).json({ error: "Invalid workout id" });
     }
-    const finishedSessions = await sessionRepository.finishAll(user_id, workout_id);
+    const finishedSessions = await sessionRepository.finishAllOfWorkout(user_id, workout_id);
     return res.status(200).json(finishedSessions);
 };
 
-export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll, getStartedAll };
+export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll, getStartedAll, finishAllOfWorkout };

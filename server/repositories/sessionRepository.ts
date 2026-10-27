@@ -119,7 +119,17 @@ const getStartedAll = async (user_id: string) => {
     return result;
 };
 
-const finishAll = async (user_id: string, workout_id: number) => {
+const finishAll = async (user_id: string) => {
+    const result = await sql`
+        UPDATE workout_session
+        SET finished_at = NOW()
+        WHERE user_id = ${user_id} AND finished_at IS NULL
+        RETURNING *;
+    `;
+    return result;
+};
+
+const finishAllOfWorkout = async (user_id: string, workout_id: number) => {
     const result = await sql`
         UPDATE workout_session
         SET finished_at = NOW()
@@ -129,4 +139,4 @@ const finishAll = async (user_id: string, workout_id: number) => {
     return result;
 };
 
-export { getAll, getOne, getByWorkout, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll, getStartedAll };
+export { getAll, getOne, getByWorkout, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll, getStartedAll, finishAllOfWorkout };
