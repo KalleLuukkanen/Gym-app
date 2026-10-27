@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getByDay, getOne } from "../api/workoutApi";
 import { getCurrent } from "../api/programApi";
-import { getStartedAll, finishAll, endSession } from "../api/sessionApi";
+import { getStartedAll, finishAll, endSession, finishedWorkout } from "../api/sessionApi";
 import type { ProgramData, WorkoutData, SessionData } from "../types/types";
 import Loading from "../components/Loading";
 import Workout from "../features/workouts/Workout";
@@ -26,6 +26,8 @@ export default function Home() {
     const [unfinishedWorkout, setUnfinishedWorkout] = useState<WorkoutData | null>(null);
     const [continueWorkout, setContinueWorkout] = useState(false);
 
+    const [workoutFinished, setWorkoutFinished] = useState(false);
+
     useEffect(() => {
         let cancelled = false;
         const load = async () => {
@@ -43,7 +45,15 @@ export default function Home() {
 
                 if (p) {
                     const w = await getByDay(p.id, weekday);
-                    if (!cancelled) setWorkout(w);
+                    if (!cancelled) {
+                        const finishedWorkoutOfToday = await finishedWorkout(w.id, today.toDateString());
+                        if (finishedWorkoutOfToday.length > 0) {
+                            setWorkoutFinished(true);
+                        } else {
+                            setWorkout(w);
+                        }
+
+                    };
                 } else {
                     setWorkout(null);
                 }
@@ -88,6 +98,14 @@ export default function Home() {
         return (
             <div className="rounded shadow p-4 w-fit">
                 <p className="text-2xl">{errorMessage}</p>
+            </div>
+        )
+    }
+
+    if (workoutFinished) {
+        return (
+            <div className="flex flex-col rounded shadow p-4 w-fit space-y-2">
+                <p className="text-2xl">You already finished a workout today!</p>
             </div>
         )
     }
