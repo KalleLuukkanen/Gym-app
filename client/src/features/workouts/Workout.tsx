@@ -9,6 +9,7 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
     const [exercises, setExercises] = useState<ExerciseData[] | null>(null);
     const [loading, setLoading] = useState(true);
     const [session, setSession] = useState<SessionData | null>(null);
+    const [sessionStarted, setSessionStarted] = useState(false);
 
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -17,7 +18,15 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
         const load = async () => {
             try {
                 const exercises_tmp = await getByWorkout(workout.id);
-                if (!cancelled) setExercises(exercises_tmp);
+                if (!cancelled) {
+                    setExercises(exercises_tmp);
+                    if (session_id) {
+                        const continuedSession = await getOne(session_id);
+                        setSession(continuedSession);
+                        setSessionStarted(true);
+                    }
+
+                };
             } catch (error) {
                 if (!cancelled) {
                     if (error instanceof Error) {
@@ -34,7 +43,7 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
         return () => { cancelled = true };
     }, [workout.id]);
 
-    const [sessionStarted, setSessionStarted] = useState(false);
+
     const [exerciseDetails, setExerciseDetails] = useState(new Map<number, number[]>());
     const [notes, setNotes] = useState("");
 

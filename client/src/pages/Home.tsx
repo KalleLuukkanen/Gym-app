@@ -98,19 +98,19 @@ export default function Home() {
                 <div className="flex flex-col rounded shadow p-4 w-fit space-y-2">
                     <p className="text-2xl">Looks like you have an unfinished workout, a {unfinishedWorkout?.name} workout started {new Date(startedSessions[0].started_at).toLocaleDateString("fi-FI")}.</p>
                     <p className="text-2xl">Do you wish to continue it?</p>
-                    <div className="flex space-x-10 ml-2">
+                    <div className="flex ml-2 mt-4 w-fit">
                         <button
-                            className="w-fit text-xl cursor-pointer"
+                            className="w-fit text-xl cursor-pointer border-r border-2 p-2 rounded-l"
                         >
                             No
                         </button>
                         <button
-                            className="w-fit text-xl cursor-pointer"
+                            className="w-fit text-xl cursor-pointer border-2 p-2"
                         >
                             No, and you can mark it as finished
                         </button>
                         <button
-                            className="w-fit text-xl cursor-pointer"
+                            className="w-fit text-xl cursor-pointer border-l border-2 p-2 rounded-r"
                             onClick={() => {
                                 setWorkout(unfinishedWorkout);
                                 setContinueWorkout(true);
