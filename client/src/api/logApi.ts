@@ -21,14 +21,14 @@ const getOne = async (id: number) => {
     return await response.json();
 };
 
-const getBySession = async (session_id: number) => {
+const getBySession = async (session_id: number): Promise<LogData[]> => {
     const response = await fetch(`${BASE_URL}/session/${session_id}`, {
         credentials: "include",
     });
     if (!response.ok) {
         throw new Error("Failed to get this session's logs, please try again later");
     }
-    return await response.json();
+    return (await response.json()) as LogData[];
 };
 
 const getByExercise = async (exercise_id: number) => {
