@@ -2,7 +2,7 @@ import type { WorkoutData, ExerciseData, SessionData, LogInput } from "../../typ
 import { getByWorkout } from "../../api/exerciseApi";
 import { useState, useEffect } from "react";
 import { endSession, startSession, getOne } from "../../api/sessionApi";
-import { updateOrCreateReps, updateOrCreateWeight } from "../../api/logApi";
+import { updateOrCreateReps, updateOrCreateWeight, getBySession } from "../../api/logApi";
 
 function Workout({ workout, session_id }: { workout: WorkoutData, session_id: number | null }) {
 
@@ -10,6 +10,9 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
     const [loading, setLoading] = useState(true);
     const [session, setSession] = useState<SessionData | null>(null);
     const [sessionStarted, setSessionStarted] = useState(false);
+    // exerciseDetails Map ( exercise_id -> Map(set -> [weight, reps]) )
+    const [exerciseDetails, setExerciseDetails] = useState(new Map<number, Map<number, number[]>>());
+    const [notes, setNotes] = useState("");
 
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -22,6 +25,17 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
                     setExercises(exercises_tmp);
                     if (session_id) {
                         const continuedSession = await getOne(session_id);
+                        const prevSessionLogs = await getBySession(session_id);
+                        for (const log of prevSessionLogs) {
+                            setExerciseDetails((prev) => {
+                                const next = new Map(prev);
+                                const exerciseDetails =
+                                    new Map(next.get(log.exercise_id) ?? new Map<number, number[]>());
+                                exerciseDetails.set(log.set_number, [log.weight, log.reps]);
+                                next.set(log.exercise_id, exerciseDetails);
+                                return next;
+                            })
+                        }
                         setSession(continuedSession);
                         setSessionStarted(true);
                     }
@@ -42,11 +56,6 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
         load();
         return () => { cancelled = true };
     }, [workout.id]);
-
-
-    // exerciseDetails Map ( exercise_id -> Map(set -> [weight, reps]) )
-    const [exerciseDetails, setExerciseDetails] = useState(new Map<number, Map<number, number[]>>());
-    const [notes, setNotes] = useState("");
 
     const start = async () => {
         try {
@@ -160,6 +169,7 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
                                         value={exerciseDetails?.get(ex.id)?.get(i + 1)?.[0] ?? ""}
                                         className="w-16 border border-gray-300 rounded p-1"
                                         onChange={(e) => updateWeight(i + 1, ex.id, Number(e.target.value))}
+                                        min="1"
                                     />
                                 </label>
                             </fieldset>
