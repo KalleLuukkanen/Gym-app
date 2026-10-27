@@ -163,4 +163,18 @@ const finishAllOfWorkout = async (req: Request, res: Response) => {
     return res.status(200).json(finishedSessions);
 };
 
-export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll, getStartedAll, finishAllOfWorkout };
+const finishedWorkoutOnDate = async (req: Request, res: Response) => {
+    const user_id = (req as any).userId;
+    const workout_id = Number(req.params.workoutId);
+    if (!Number.isInteger(workout_id)) {
+        return res.status(400).json({ error: "Invalid workout id" });
+    }
+    const date = req.params.date;
+    if (!date) {
+        return res.status(400).json({ error: "Missing date" });
+    }
+    const session = await sessionRepository.finishedWorkoutOnDate(user_id, workout_id, date);
+    return res.status(200).json(session);
+};
+
+export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll, getStartedAll, finishAllOfWorkout, finishedWorkoutOnDate };

@@ -139,4 +139,14 @@ const finishAllOfWorkout = async (user_id: string, workout_id: number) => {
     return result;
 };
 
-export { getAll, getOne, getByWorkout, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll, getStartedAll, finishAllOfWorkout };
+// check if workout has a finished session on given date
+const finishedWorkoutOnDate = async (user_id: string, workout_id: number, date: string) => {
+    const result = await sql`
+        SELECT *
+        FROM workout_session
+        WHERE user_id = ${user_id} AND workout_id = ${workout_id} AND finished_at::DATE = ${date};
+    `;
+    return result;
+};
+
+export { getAll, getOne, getByWorkout, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll, getStartedAll, finishAllOfWorkout, finishedWorkoutOnDate };

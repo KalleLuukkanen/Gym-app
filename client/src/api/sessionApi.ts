@@ -162,4 +162,15 @@ const finishAll = async () => {
     return await response.json();
 };
 
-export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll, getStartedAll, finishAllOfWorkout };
+const finishedWorkout = async (workout_id: number, date: string): Promise<SessionData[]> => {
+    const response = await fetch(`${BASE_URL}/${workout_id}/day/${date}`, {
+        credentials: "include",
+    });
+    if (!response.ok) {
+        "Failed to get finished sessions of date, please try again later";
+    }
+    return (await response.json()) as SessionData[];
+
+}
+
+export { getAll, getByWorkout, getOne, create, changeDate, addNotes, deleteAll, deleteOne, startSession, endSession, getStarted, finishAll, getStartedAll, finishAllOfWorkout, finishedWorkout };
