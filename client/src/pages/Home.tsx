@@ -134,7 +134,38 @@ export default function Home() {
             return (
                 <div className="flex flex-col rounded shadow p-4 w-fit space-y-2">
                     <p className="text-2xl">Looks like you have {startedSessions.length} unfinished workout(s).</p>
-                    <p>The latest </p>
+                    <p className="text-2xl">The latest is a {unfinishedWorkout?.name} workout started on {new Date(startedSessions[0].started_at).toLocaleDateString("fi-FI")}</p>
+                    <p className="text-2xl">Do you wish to continue the latest workout?</p>
+                    <div className="flex ml-2 mt-4 w-fit">
+                        <button
+                            className="w-fit text-xl cursor-pointer border-r border-2 p-2 rounded-l"
+                            onClick={() => {
+                                setStartedSessions([]);
+                                setContinueWorkout(false);
+                            }}
+                        >
+                            No
+                        </button>
+                        <button
+                            className="w-fit text-xl cursor-pointer border-2 p-2"
+                            onClick={() => {
+                                finishAll();
+                                setStartedSessions([]);
+                                setContinueWorkout(false);
+                            }}
+                        >
+                            No, and you can mark all as finished
+                        </button>
+                        <button
+                            className="w-fit text-xl cursor-pointer border-l border-2 p-2 rounded-r"
+                            onClick={() => {
+                                setWorkout(unfinishedWorkout);
+                                setContinueWorkout(true);
+                            }}
+                        >
+                            Yes
+                        </button>
+                    </div>
                 </div>
             )
         }
