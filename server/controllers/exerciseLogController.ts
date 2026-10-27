@@ -89,6 +89,30 @@ const deleteAll = async (req: Request, res: Response) => {
     return res.status(200).json(deletedLogs);
 };
 
+const updateOrCreateWeight = async (req: Request, res: Response) => {
+    const user_id = (req as any).userId;
+    const { weight, set_number, exercise_id, session_id } = req.body;
+    if (!weight || !set_number || !exercise_id || !session_id) {
+        return res.status(400).json({ error: "Missing required parameters" });
+    }
+    const log = await exerciseLogRepository.updateOrCreateWeight(user_id, weight, session_id, exercise_id, set_number);
+    if (!log) {
+        return res.status(404).json({ error: "Error creating log or updating weight" });
+    }
+    return res.status(200).json(log);
+};
 
+const updateOrCreateReps = async (req: Request, res: Response) => {
+    const user_id = (req as any).userId;
+    const { reps, set_number, exercise_id, session_id } = req.body;
+    if (!reps || !set_number || !exercise_id || !session_id) {
+        return res.status(400).json({ error: "Missing required parameters" });
+    }
+    const log = await exerciseLogRepository.updateOrCreateReps(user_id, reps, session_id, exercise_id, set_number);
+    if (!log) {
+        return res.status(404).json({ error: "Error creating log or updating reps" });
+    }
+    return res.status(200).json(log);
+};
 
-export { getAll, getOne, getBySession, getByExercise, create, modify, deleteOne, deleteAll };
+export { getAll, getOne, getBySession, getByExercise, create, modify, deleteOne, deleteAll, updateOrCreateReps, updateOrCreateWeight };

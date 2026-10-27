@@ -77,4 +77,54 @@ const deleteAll = async (user_id: string) => {
     return result;
 };
 
-export { getAll, getOne, getBySession, getByExercise, create, modify, deleteOne, deleteAll };
+const updateOrCreateWeight = async (user_id: string, weight: number, session_id: number, exercise_id: number, set_number: number) => {
+    const existingLog = await sql`
+        SELECT *
+        FROM exercise_log
+        WHERE user_id = ${user_id} AND session_id = ${session_id} AND exercise_id = ${exercise_id} AND set_number = ${set_number};
+    `;
+
+    if (existingLog.length > 0) {
+        const updated = await sql`
+            UPDATE exercise_log
+            SET weight = ${weight}
+            WHERE user_id = ${user_id} AND session_id = ${session_id} AND exercise_id = ${exercise_id} AND set_number = ${set_number}
+            RETURNING *;
+        `;
+        return updated[0];
+    } else {
+        const created = await sql`
+            INSERT INTO exercise_log (user_id, exercise_id, session_id, set_number, reps, weight)
+            VALUES (${user_id}, ${exercise_id}, ${session_id}, ${set_number}, 0, ${weight}) // note, setting reps as 0
+            RETURNING *;
+        `;
+        return created[0];
+    }
+};
+
+const updateOrCreateReps = async (user_id: string, reps: number, session_id: number, exercise_id: number, set_number: number) => {
+    const existingLog = await sql`
+        SELECT *
+        FROM exercise_log
+        WHERE user_id = ${user_id} AND session_id = ${session_id} AND exercise_id = ${exercise_id} AND set_number = ${set_number};
+    `;
+
+    if (existingLog.length > 0) {
+        const updated = await sql`
+            UPDATE exercise_log
+            SET reps = ${reps}
+            WHERE user_id = ${user_id} AND session_id = ${session_id} AND exercise_id = ${exercise_id} AND set_number = ${set_number}
+            RETURNING *;
+        `;
+        return updated[0];
+    } else {
+        const created = await sql`
+            INSERT INTO exercise_log (user_id, exercise_id, session_id, set_number, reps, weight)
+            VALUES (${user_id}, ${exercise_id}, ${session_id}, ${set_number}, ${reps}, 0) // note, setting weight as 0
+            RETURNING *;
+        `;
+        return created[0];
+    }
+};
+
+export { getAll, getOne, getBySession, getByExercise, create, modify, deleteOne, deleteAll, updateOrCreateReps, updateOrCreateWeight };

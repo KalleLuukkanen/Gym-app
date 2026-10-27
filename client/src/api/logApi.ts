@@ -89,4 +89,30 @@ const deleteAll = async () => {
     return await response.json();
 };
 
-export { getAll, getByExercise, getBySession, getOne, create, modify, deleteAll, deleteOne };
+const updateOrCreateWeight = async (weight: number, set_number: number, exercise_id: number, session_id: number) => {
+    const response = await fetch(`${BASE_URL}/weight`, {
+        credentials: "include",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ weight, set_number, exercise_id, session_id }),
+    });
+    if (!response.ok) {
+        throw new Error("Couldn't save weight of this exercise, please try again later");
+    }
+    return await response.json();
+};
+
+const updateOrCreateReps = async (reps: number, set_number: number, exercise_id: number, session_id: number) => {
+    const response = await fetch(`${BASE_URL}/reps`, {
+        credentials: "include",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reps, set_number, exercise_id, session_id }),
+    });
+    if (!response.ok) {
+        throw new Error("Couldn't save reps of this exercise, please try again later");
+    }
+    return await response.json();
+};
+
+export { getAll, getByExercise, getBySession, getOne, create, modify, deleteAll, deleteOne, updateOrCreateReps, updateOrCreateWeight };

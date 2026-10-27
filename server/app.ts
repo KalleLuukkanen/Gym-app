@@ -93,6 +93,8 @@ app.get("/api/logs/session/:sessionId", exerciseLogController.getBySession);
 app.get("/api/logs/exercise/:exerciseId", exerciseLogController.getByExercise);
 app.get("/api/logs/:exerciseLogId", exerciseLogController.getOne);
 app.post("/api/logs", exerciseLogController.create);
+app.post("/api/logs/weight", exerciseLogController.updateOrCreateWeight);
+app.post("/api/logs/reps", exerciseLogController.updateOrCreateReps);
 app.patch("/api/logs/:exerciseLogId", exerciseLogController.modify);
 app.delete("/api/logs", exerciseLogController.deleteAll);
 app.delete("/api/logs/:exerciseLogId", exerciseLogController.deleteOne);
