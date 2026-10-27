@@ -2,7 +2,7 @@ import type { WorkoutData, ExerciseData, SessionData, LogInput } from "../../typ
 import { getByWorkout } from "../../api/exerciseApi";
 import { useState, useEffect } from "react";
 import { endSession, startSession, getOne } from "../../api/sessionApi";
-import { create } from "../../api/logApi";
+import { updateOrCreateReps, updateOrCreateWeight } from "../../api/logApi";
 
 function Workout({ workout, session_id }: { workout: WorkoutData, session_id: number | null }) {
 
@@ -44,7 +44,8 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
     }, [workout.id]);
 
 
-    const [exerciseDetails, setExerciseDetails] = useState(new Map<number, number[]>());
+    // exerciseDetails Map ( exercise_id -> Map(set -> [weight, reps]) )
+    const [exerciseDetails, setExerciseDetails] = useState(new Map<number, Map<number, number[]>>());
     const [notes, setNotes] = useState("");
 
     const start = async () => {
@@ -78,12 +79,41 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
         }
     };
 
-    const updateWeight = async (set: number, exercise_id: number, weight: number) => {
-        setExerciseDetails((prev) => {
+    const updateWeight = async (set_number: number, exercise_id: number, weight: number) => {
+        if (!session) return;
+
+        await updateOrCreateWeight(weight, set_number, exercise_id, session.id);
+
+        setExerciseDetails(prev => {
             const next = new Map(prev);
 
+            const exerciseDetails =
+                new Map(next.get(exercise_id) ?? new Map<number, number[]>());
 
+            const prevReps = exerciseDetails.get(set_number)?.[1] ?? 0;
 
+            exerciseDetails.set(set_number, [weight, prevReps]);
+            next.set(exercise_id, exerciseDetails);
+
+            return next;
+        });
+    };
+
+    const updateReps = async (set_number: number, exercise_id: number, reps: number) => {
+        if (!session) return;
+
+        await updateOrCreateReps(reps, set_number, exercise_id, session.id);
+
+        setExerciseDetails(prev => {
+            const next = new Map(prev);
+
+            const exerciseDetails =
+                new Map(next.get(exercise_id) ?? new Map<number, number[]>());
+
+            const prevWeight = exerciseDetails.get(set_number)?.[0] ?? 0;
+
+            exerciseDetails.set(set_number, [prevWeight, reps]);
+            next.set(exercise_id, exerciseDetails);
 
             return next;
         });
@@ -106,28 +136,30 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
     return (
         <div className="flex flex-col space-y-4">
             <span className="text-xl">{workout.name}</span>
-            {exercises?.map((e) => (
-                <div className="flex flex-col space-y-2 border rounded p-4" key={e.id}>
-                    <span className="text-lg">{e.position}. {e.name}</span>
+            {exercises?.map((ex) => (
+                <div className="flex flex-col space-y-2 border rounded p-4" key={ex.id}>
+                    <span className="text-lg">{ex.position}. {ex.name}</span>
                     <ul className="flex flex-wrap gap-6">
-                        {Array.from({ length: e.target_sets }, (_, i) => (
+                        {Array.from({ length: ex.target_sets }, (_, i) => (
                             <fieldset key={i} className="flex space-x-1 items-center justify-center">
                                 <legend>Set {i + 1}:</legend>
                                 <label className="flex flex-col space-y-1">
                                     <span>Reps:</span>
                                     <input
                                         type="number"
+                                        value={exerciseDetails?.get(ex.id)?.get(i + 1)?.[1] ?? ""}
                                         className="w-16 border border-gray-300 rounded p-1"
-                                        placeholder={`${e.min_reps}-${e.max_reps}`}
-                                        onChange={(e) => {
-                                        }}
+                                        placeholder={`${ex.min_reps}-${ex.max_reps}`}
+                                        onChange={(e) => updateReps(i + 1, ex.id, Number(e.target.value))}
                                     />
                                 </label>
                                 <label className="flex flex-col space-y-1">
                                     <span>Weight:</span>
                                     <input
                                         type="number"
+                                        value={exerciseDetails?.get(ex.id)?.get(i + 1)?.[0] ?? ""}
                                         className="w-16 border border-gray-300 rounded p-1"
+                                        onChange={(e) => updateWeight(i + 1, ex.id, Number(e.target.value))}
                                     />
                                 </label>
                             </fieldset>
