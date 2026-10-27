@@ -1,4 +1,4 @@
-import type { LogInput } from "../types/types";
+import type { LogData, LogInput } from "../types/types";
 const BASE_URL = `${import.meta.env.VITE_API_URL}/api/logs`;
 
 const getAll = async () => {
@@ -89,7 +89,7 @@ const deleteAll = async () => {
     return await response.json();
 };
 
-const updateOrCreateWeight = async (weight: number, set_number: number, exercise_id: number, session_id: number) => {
+const updateOrCreateWeight = async (weight: number, set_number: number, exercise_id: number, session_id: number): Promise<LogData> => {
     const response = await fetch(`${BASE_URL}/weight`, {
         credentials: "include",
         method: "POST",
@@ -99,10 +99,10 @@ const updateOrCreateWeight = async (weight: number, set_number: number, exercise
     if (!response.ok) {
         throw new Error("Couldn't save weight of this exercise, please try again later");
     }
-    return await response.json();
+    return (await response.json()) as LogData;
 };
 
-const updateOrCreateReps = async (reps: number, set_number: number, exercise_id: number, session_id: number) => {
+const updateOrCreateReps = async (reps: number, set_number: number, exercise_id: number, session_id: number): Promise<LogData> => {
     const response = await fetch(`${BASE_URL}/reps`, {
         credentials: "include",
         method: "POST",
@@ -112,7 +112,7 @@ const updateOrCreateReps = async (reps: number, set_number: number, exercise_id:
     if (!response.ok) {
         throw new Error("Couldn't save reps of this exercise, please try again later");
     }
-    return await response.json();
+    return (await response.json()) as LogData;
 };
 
 export { getAll, getByExercise, getBySession, getOne, create, modify, deleteAll, deleteOne, updateOrCreateReps, updateOrCreateWeight };
