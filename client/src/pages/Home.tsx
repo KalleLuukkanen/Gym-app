@@ -101,11 +101,20 @@ export default function Home() {
                     <div className="flex ml-2 mt-4 w-fit">
                         <button
                             className="w-fit text-xl cursor-pointer border-r border-2 p-2 rounded-l"
+                            onClick={() => {
+                                setStartedSessions([]);
+                                setContinueWorkout(false);
+                            }}
                         >
                             No
                         </button>
                         <button
                             className="w-fit text-xl cursor-pointer border-2 p-2"
+                            onClick={() => {
+                                endSession(startedSessions[0].id, null);
+                                setStartedSessions([]);
+                                setContinueWorkout(false);
+                            }}
                         >
                             No, and you can mark it as finished
                         </button>
