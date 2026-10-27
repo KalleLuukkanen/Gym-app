@@ -77,6 +77,7 @@ const deleteAll = async (user_id: string) => {
     return result;
 };
 
+// note, setting reps as 0
 const updateOrCreateWeight = async (user_id: string, weight: number, session_id: number, exercise_id: number, set_number: number) => {
     const existingLog = await sql`
         SELECT *
@@ -95,13 +96,14 @@ const updateOrCreateWeight = async (user_id: string, weight: number, session_id:
     } else {
         const created = await sql`
             INSERT INTO exercise_log (user_id, exercise_id, session_id, set_number, reps, weight)
-            VALUES (${user_id}, ${exercise_id}, ${session_id}, ${set_number}, 0, ${weight}) // note, setting reps as 0
+            VALUES (${user_id}, ${exercise_id}, ${session_id}, ${set_number}, 0, ${weight}) 
             RETURNING *;
         `;
         return created[0];
     }
 };
 
+// note, setting weight as 0
 const updateOrCreateReps = async (user_id: string, reps: number, session_id: number, exercise_id: number, set_number: number) => {
     const existingLog = await sql`
         SELECT *
@@ -120,7 +122,7 @@ const updateOrCreateReps = async (user_id: string, reps: number, session_id: num
     } else {
         const created = await sql`
             INSERT INTO exercise_log (user_id, exercise_id, session_id, set_number, reps, weight)
-            VALUES (${user_id}, ${exercise_id}, ${session_id}, ${set_number}, ${reps}, 0) // note, setting weight as 0
+            VALUES (${user_id}, ${exercise_id}, ${session_id}, ${set_number}, ${reps}, 0)
             RETURNING *;
         `;
         return created[0];
