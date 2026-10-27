@@ -11,7 +11,7 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
     const [session, setSession] = useState<SessionData | null>(null);
     const [sessionStarted, setSessionStarted] = useState(false);
     // exerciseDetails Map ( exercise_id -> Map(set -> [weight, reps]) )
-    const [exerciseDetails, setExerciseDetails] = useState(new Map<number, Map<number, number[]>>());
+    const [exerciseDetails, setExerciseDetails] = useState(new Map<number, Map<number, (number | null)[]>>());
     const [notes, setNotes] = useState("");
 
     const [errorMessage, setErrorMessage] = useState("");
@@ -88,44 +88,70 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
         }
     };
 
-    const updateWeight = async (set_number: number, exercise_id: number, weight: number) => {
+    const updateWeight = async (set_number: number, exercise_id: number, weight: number | null) => {
         if (!session) return;
-
-        await updateOrCreateWeight(weight, set_number, exercise_id, session.id);
 
         setExerciseDetails(prev => {
             const next = new Map(prev);
+            const details = new Map(next.get(exercise_id) ?? new Map());
 
-            const exerciseDetails =
-                new Map(next.get(exercise_id) ?? new Map<number, number[]>());
+            const prevReps = details.get(set_number)?.[1] ?? null;
 
-            const prevReps = exerciseDetails.get(set_number)?.[1] ?? 0;
-
-            exerciseDetails.set(set_number, [weight, prevReps]);
-            next.set(exercise_id, exerciseDetails);
+            details.set(set_number, [weight, prevReps]);
+            next.set(exercise_id, details);
 
             return next;
         });
+
+        if (!weight) return;
+
+        try {
+            await updateOrCreateWeight(
+                weight ?? 0,
+                set_number,
+                exercise_id,
+                session.id
+            );
+        } catch (error) {
+            if (error instanceof Error) {
+                setErrorMessage(error.message);
+            } else {
+                setErrorMessage("Unknown error in the system, please try again later")
+            }
+        }
     };
 
-    const updateReps = async (set_number: number, exercise_id: number, reps: number) => {
+    const updateReps = async (set_number: number, exercise_id: number, reps: number | null) => {
         if (!session) return;
-
-        await updateOrCreateReps(reps, set_number, exercise_id, session.id);
 
         setExerciseDetails(prev => {
             const next = new Map(prev);
+            const details = new Map(next.get(exercise_id) ?? new Map());
 
-            const exerciseDetails =
-                new Map(next.get(exercise_id) ?? new Map<number, number[]>());
+            const prevWeight = details.get(set_number)?.[0] ?? null;
 
-            const prevWeight = exerciseDetails.get(set_number)?.[0] ?? 0;
-
-            exerciseDetails.set(set_number, [prevWeight, reps]);
-            next.set(exercise_id, exerciseDetails);
+            details.set(set_number, [prevWeight, reps]);
+            next.set(exercise_id, details);
 
             return next;
         });
+
+        if (!reps) return;
+
+        try {
+            await updateOrCreateReps(
+                reps,
+                set_number,
+                exercise_id,
+                session.id
+            );
+        } catch (error) {
+            if (error instanceof Error) {
+                setErrorMessage(error.message);
+            } else {
+                setErrorMessage("Unknown error in the system, please try again later")
+            }
+        }
     };
 
 
@@ -158,8 +184,11 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
                                         type="number"
                                         value={exerciseDetails?.get(ex.id)?.get(i + 1)?.[0] ?? ""}
                                         className="w-16 border border-gray-300 rounded p-1"
-                                        onChange={(e) => updateWeight(i + 1, ex.id, Number(e.target.value))}
-                                        min="1"
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            updateWeight(i + 1, ex.id, (value === "" ? null : Number(value)))
+                                        }}
+                                        min="0"
                                     />
                                 </label>
                                 <label className="flex flex-col space-y-1">
@@ -169,7 +198,10 @@ function Workout({ workout, session_id }: { workout: WorkoutData, session_id: nu
                                         value={exerciseDetails?.get(ex.id)?.get(i + 1)?.[1] ?? ""}
                                         className="w-16 border border-gray-300 rounded p-1"
                                         placeholder={`${ex.min_reps}-${ex.max_reps}`}
-                                        onChange={(e) => updateReps(i + 1, ex.id, Number(e.target.value))}
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            updateReps(i + 1, ex.id, (value === "" ? null : Number(value)));
+                                        }}
                                     />
                                 </label>
                             </fieldset>
