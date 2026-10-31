@@ -35,7 +35,7 @@ export default function Home() {
                 const startedSessions_tmp = await getStartedAll();
                 if (startedSessions_tmp.length > 0) {
                     setStartedSessions(startedSessions_tmp);
-                    const startedWorkout = await getOne(startedSessions_tmp[0].workout_id);
+                    const startedWorkout = await getOne(startedSessions_tmp[0]?.workout_id);
                     setUnfinishedWorkout(startedWorkout);
                 }
 
@@ -45,7 +45,7 @@ export default function Home() {
 
                 if (p) {
                     const w = await getByDay(p.id, weekday);
-                    if (!cancelled) {
+                    if (w && !cancelled) {
                         const finishedWorkoutOfToday = await finishedWorkout(w.id, today.toDateString());
                         if (finishedWorkoutOfToday.length > 0) {
                             setWorkoutFinished(true);
