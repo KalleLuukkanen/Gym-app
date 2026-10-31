@@ -1,14 +1,14 @@
-import type { ProgramInput, WorkoutInput } from "../types/types";
+import type { ProgramInput, WorkoutInput, ProgramData } from "../types/types";
 const BASE_URL = `${import.meta.env.VITE_API_URL}/api/programs`;
 
-const getAll = async () => {
+const getAll = async (): Promise<ProgramData[]> => {
     const response = await fetch(BASE_URL, {
         credentials: "include",
     });
     if (!response.ok) {
         throw new Error("Failed to get all your programs, please try again later");
     }
-    return await response.json();
+    return (await response.json()) as ProgramData[];
 };
 
 const getPublic = async () => {
