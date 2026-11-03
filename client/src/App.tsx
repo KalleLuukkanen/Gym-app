@@ -5,6 +5,7 @@ import Layout from './layout/Layout'
 import RequireAuth from './features/auth/RequireAuth'
 import ProgramDashboard from './pages/programs/ProgramDashboard'
 import ProgramForm from './pages/programs/ProgramForm'
+import PublicPrograms from './pages/programs/PublicPrograms'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/programs" element={<ProgramDashboard />} />
           <Route path="/programs/new" element={<ProgramForm />} />
+          <Route path="/programs/public" element={<PublicPrograms />} />
         </Route>
       </Route>
     </Routes>
