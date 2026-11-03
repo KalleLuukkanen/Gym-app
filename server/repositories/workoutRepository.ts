@@ -29,6 +29,15 @@ const getByProgram = async (user_id: string, program_id: number) => {
     return result;
 };
 
+const getByProgramPublic = async (program_id: number) => {
+    const result = await sql`
+        SELECT *
+        FROM workout
+        WHERE program_id = ${program_id};
+    `;
+    return result;
+};
+
 const getByDay = async (user_id: string, day: string, program_id: number) => {
     const result = await sql`
         SELECT *
@@ -67,4 +76,4 @@ const deleteAll = async (user_id: string) => {
     return result;
 };
 
-export { getAll, getOne, getByProgram, getByDay, create, deleteAll, deleteOne };
+export { getAll, getOne, getByProgram, getByDay, create, deleteAll, deleteOne, getByProgramPublic };

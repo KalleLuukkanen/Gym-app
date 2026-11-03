@@ -30,6 +30,16 @@ const getByWorkout = async (user_id: string, workout_id: number) => {
     return result;
 };
 
+const getByWorkoutPublic = async (workout_id: number) => {
+    const result = await sql`
+        SELECT *
+        FROM exercise
+        WHERE workout_id = ${workout_id}
+        ORDER BY position ASC;
+    `;
+    return result;
+};
+
 const create = async (user_id: string, name: string, position: number, target_sets: number, min_reps: number, max_reps: number, workout_id: number) => {
     const result = await sql`
         INSERT INTO exercise (user_id, name, position, target_sets, min_reps, max_reps, workout_id)
@@ -89,4 +99,4 @@ const deleteAll = async (user_id: string) => {
     return result[0];
 };
 
-export { getAll, getOne, getByWorkout, create, modify, changeName, changePosition, deleteOne, deleteAll };
+export { getAll, getOne, getByWorkout, create, modify, changeName, changePosition, deleteOne, deleteAll, getByWorkoutPublic };

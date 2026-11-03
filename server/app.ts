@@ -55,6 +55,7 @@ app.delete("/api/programs", programController.deleteAll);
 app.delete("/api/programs/:programId");
 
 app.get("/api/workouts", workoutController.getAll);
+app.get("/api/workouts/program/:programId/public", workoutController.getByProgramPublic);
 app.get("/api/workouts/program/:programId/:day", workoutController.getByDay);
 app.get("/api/workouts/program/:programId", workoutController.getByProgram);
 app.get("/api/workouts/:workoutId", workoutController.getOne);
@@ -79,6 +80,7 @@ app.delete("/api/sessions", sessionController.deleteAll);
 app.delete("/api/sessions/:sessionId", sessionController.deleteOne);
 
 app.get("/api/exercises", exerciseController.getAll);
+app.get("/api/exercises/workout/:workoutId/public", exerciseController.getByWorkoutPublic);
 app.get("/api/exercises/workout/:workoutId", exerciseController.getByWorkout);
 app.get("/api/exercises/:exerciseId", exerciseController.getOne);
 app.post("/api/exercises/:workoutId", exerciseController.create);

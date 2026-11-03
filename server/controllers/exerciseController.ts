@@ -30,6 +30,15 @@ const getByWorkout = async (req: Request, res: Response) => {
     return res.status(200).json(exercises);
 };
 
+const getByWorkoutPublic = async (req: Request, res: Response) => {
+    const workout_id = Number(req.params.workoutId);
+    if (!Number.isInteger(workout_id)) {
+        return res.status(400).json({ error: "Invalid workout id" });
+    }
+    const exercises = await exerciseRepository.getByWorkoutPublic(workout_id);
+    return res.status(200).json(exercises);
+};
+
 const create = async (req: Request, res: Response) => {
     const user_id = (req as any).userId;
     const workout_id = Number(req.params.workoutId);
@@ -117,4 +126,4 @@ const deleteAll = async (req: Request, res: Response) => {
     return res.status(200).json(deletedExercises);
 };
 
-export { getAll, getOne, getByWorkout, create, modify, changeName, changePosition, deleteOne, deleteAll };
+export { getAll, getOne, getByWorkout, create, modify, changeName, changePosition, deleteOne, deleteAll, getByWorkoutPublic };

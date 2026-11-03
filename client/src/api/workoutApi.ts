@@ -31,6 +31,14 @@ const getByProgram = async (program_id: number) => {
     return await response.json();
 };
 
+const getByProgramPublic = async (program_id: number) => {
+    const response = await fetch(`${BASE_URL}/program/${program_id}/public`);
+    if (!response.ok) {
+        throw new Error("Failed to get workouts, please try again later");
+    }
+    return await response.json();
+};
+
 const getByDay = async (program_id: number, day: string) => {
     const response = await fetch(`${BASE_URL}/program/${program_id}/${day}`, {
         credentials: "include",
@@ -79,4 +87,4 @@ const deleteAll = async () => {
     return await response.json();
 };
 
-export { getAll, getByDay, getByProgram, getOne, create, deleteAll, deleteOne };
+export { getAll, getByDay, getByProgram, getOne, create, deleteAll, deleteOne, getByProgramPublic };

@@ -30,6 +30,15 @@ const getByProgram = async (req: Request, res: Response) => {
     return res.status(200).json(workouts);
 };
 
+const getByProgramPublic = async (req: Request, res: Response) => {
+    const program_id = Number(req.params.programId);
+    if (!Number.isInteger(program_id)) {
+        return res.status(400).json({ error: "Invalid program id" });
+    }
+    const workouts = await workoutRepository.getByProgramPublic(program_id);
+    return res.status(200).json(workouts);
+};
+
 const getByDay = async (req: Request, res: Response) => {
     const user_id = (req as any).userId;
     const program_id = Number(req.params.programId);
@@ -83,4 +92,4 @@ const deleteOne = async (req: Request, res: Response) => {
     return res.status(200).json(deletedWorkout);
 };
 
-export { getAll, getOne, getByProgram, getByDay, create, deleteAll, deleteOne };
+export { getAll, getOne, getByProgram, getByDay, create, deleteAll, deleteOne, getByProgramPublic };

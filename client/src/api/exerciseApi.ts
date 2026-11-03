@@ -31,6 +31,14 @@ const getByWorkout = async (workout_id: number) => {
     return await response.json();
 };
 
+const getByWorkoutPublic = async (workout_id: number) => {
+    const response = await fetch(`${BASE_URL}/workout/${workout_id}/public`);
+    if (!response.ok) {
+        throw new Error("Failed to get exercises, please try again later");
+    }
+    return await response.json();
+};
+
 const create = async (workout_id: number, exercise: ExerciseInput) => {
     const response = await fetch(`${BASE_URL}/${workout_id}`, {
         credentials: "include",
@@ -105,4 +113,4 @@ const deleteAll = async () => {
     return await response.json();
 };
 
-export { getAll, getByWorkout, getOne, create, modify, changeName, changePosition, deleteAll, deleteOne };
+export { getAll, getByWorkout, getOne, create, modify, changeName, changePosition, deleteAll, deleteOne, getByWorkoutPublic };
