@@ -11,14 +11,14 @@ const getAll = async (): Promise<ProgramData[]> => {
     return (await response.json()) as ProgramData[];
 };
 
-const getPublic = async () => {
+const getPublic = async (): Promise<ProgramData[]> => {
     const response = await fetch(`${BASE_URL}/public`, {
         credentials: "include",
     });
     if (!response.ok) {
         throw new Error("Failed to fetch public programs, please try again later");
     }
-    return await response.json();
+    return (await response.json()) as ProgramData[];
 };
 
 const getCurrent = async () => {
