@@ -32,7 +32,9 @@ const getByProgram = async (program_id: number) => {
 };
 
 const getByProgramPublic = async (program_id: number) => {
-    const response = await fetch(`${BASE_URL}/program/${program_id}/public`);
+    const response = await fetch(`${BASE_URL}/program/${program_id}/public`, {
+        credentials: "include",
+    });
     if (!response.ok) {
         throw new Error("Failed to get workouts, please try again later");
     }
